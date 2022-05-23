@@ -59,8 +59,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponseDto deleteUser(Long userId) {
         User user = getUser(userId);
-        userRepository.delete(user);
-        return mapper.userToUserResponseDto(user);
+        UserResponseDto userTemp = mapper.userToUserResponseDto(user);
+        userRepository.deleteById(userId);
+//        userRepository.delete(user);
+//        System.out.println(userTemp.getFullname());
+        return userTemp;
     }
 
     @Override
@@ -68,7 +71,8 @@ public class UserServiceImpl implements UserService{
         User userToEdit = getUser(userId);
         userToEdit.setFullname(userRegisterDto.getFullname());
         userToEdit.setPhone(userRegisterDto.getPhone());
-
+        System.out.println(userToEdit.getFullname());
+        userRepository.save(userToEdit);
         return mapper.userToUserResponseDto(userToEdit);
     }
 }

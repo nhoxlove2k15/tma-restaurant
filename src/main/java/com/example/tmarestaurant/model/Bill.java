@@ -7,16 +7,18 @@ import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "bills")
+@Entity(name = "bills")
+//@Table(name = "bills")
+@Table
 public class Bill {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id ;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bill_details_id")
     private BillDetail billDetails;
     @Column(name = "totalprice")
     private double totalprice;

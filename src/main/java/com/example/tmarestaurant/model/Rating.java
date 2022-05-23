@@ -17,11 +17,22 @@ public class Rating {
     @Column(name = "point")
     private double point;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false,updatable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id",insertable = false,updatable = false)
     private Menu menu;
+
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "menu_id")
+    private Long menuId;
+
+    public Rating(double point, Long userId, Long menuId) {
+        this.point = point;
+        this.userId = userId;
+        this.menuId = menuId;
+    }
 }

@@ -4,6 +4,7 @@ import com.example.tmarestaurant.model.Category;
 import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Like;
 import com.example.tmarestaurant.model.Rating;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 import org.json.JSONObject;
 
@@ -15,12 +16,14 @@ import java.util.Set;
 public class MenuRequestDto {
 
 
+    private String name;
     private String description;
     private double price;
 //    private JSONObject images;
 //    private double point;
 //    private int likedCount;
-    private Long category;
+    @JsonAlias(value = "category_id")
+    private int categoryId;
 
 
 }

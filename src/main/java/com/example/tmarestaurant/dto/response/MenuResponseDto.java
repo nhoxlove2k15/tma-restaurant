@@ -1,5 +1,6 @@
 package com.example.tmarestaurant.dto.response;
 
+import com.example.tmarestaurant.model.Category;
 import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Like;
 import com.example.tmarestaurant.model.Rating;
@@ -17,7 +18,7 @@ public class MenuResponseDto {
 
     private double price;
 
-    private JSONObject images;
+    private String images;
     private double point;
     private int likedCount;
     private Set<Like> likes = new HashSet<>();
@@ -26,5 +27,5 @@ public class MenuResponseDto {
 
     private Set<Comment> comments = new HashSet<>();
 
-    private Long category;
+    private Category category;
 }

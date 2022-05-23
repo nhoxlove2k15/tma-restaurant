@@ -33,10 +33,22 @@ public class User {
     @OneToMany( mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Bill> bills = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private Set<Like> likes = new HashSet<>();
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private Set<Rating> ratings = new HashSet<>();
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>();
+
+
+
+    public User(String fullname, String username, String password, String phone, UserRole role) {
+        this.fullname = fullname;
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.role = role;
+    }
+
+
 }

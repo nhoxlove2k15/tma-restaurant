@@ -9,15 +9,14 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "bill_details")
+@Entity(name = "bill_details")
+//@Table(name = "bill_details")
+@Table
 public class BillDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "bill_id")
-    private Bill bill;
+//    private Bill bill;
     @Column(name = "discount")
     private double discount;
     @Column(name = "menu_origin", columnDefinition = "json")
