@@ -40,6 +40,3 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
 }
-enum UserRole {
-    ADMIN,CUSTOMER
-}

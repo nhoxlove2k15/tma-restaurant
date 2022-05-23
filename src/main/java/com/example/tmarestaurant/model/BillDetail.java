@@ -16,11 +16,11 @@ public class BillDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @OneToOne
+    @JoinColumn(name = "bill_id")
     private Bill bill;
     @Column(name = "discount")
     private double discount;
     @Column(name = "menu_origin", columnDefinition = "json")
-    @JsonRawValue
-    private List<Menu> menuOrigin;
+    private String menuOrigin;
 
 }
