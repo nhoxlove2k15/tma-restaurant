@@ -19,6 +19,7 @@ public class mapper {
         userResponseDto.setComments(user.getComments());
         userResponseDto.setRole(user.getRole());
         userResponseDto.setRatings(user.getRatings());
+        userResponseDto.setPhone(user.getPhone());
         return userResponseDto;
     }
     public static List<UserResponseDto> usersToUserResponseDtos(List<User> users) {
@@ -31,9 +32,10 @@ public class mapper {
     }
     public static MenuResponseDto menuToMenuResponseDto(Menu menu) {
         MenuResponseDto menuResponseDto = new MenuResponseDto();
-        menuResponseDto.setCategory(menu.getCategory().getId());
+        menuResponseDto.setId(menu.getId());
+        menuResponseDto.setCategory(menu.getCategory());
         menuResponseDto.setDescription(menu.getDescription());
-//        menuResponseDto.setImages(menu.getImages());
+        menuResponseDto.setImages(menu.getImages());
         menuResponseDto.setComments(menu.getComments());
         menuResponseDto.setLikes(menu.getLikes());
         menuResponseDto.setRatings(menu.getRatings());

@@ -3,6 +3,7 @@ package com.example.tmarestaurant.controlller;
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.service.MenuService;
+import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,28 +23,32 @@ public class MenuController {
     }
     @PostMapping("/addMenu")
     public ResponseEntity<MenuResponseDto> addMenu(@RequestBody final MenuRequestDto menuRequestDto) {
-        MenuResponseDto MenuResponseDto = menuService.addMenu(menuRequestDto);
-        return new ResponseEntity<>(MenuResponseDto, HttpStatus.OK);
+        MenuResponseDto menuResponseDto = menuService.addMenu(menuRequestDto);
+        return new ResponseEntity<>(menuResponseDto, HttpStatus.OK);
     }
     @GetMapping("get/{id}")
-    public ResponseEntity<MenuResponseDto> getMenu(@PathVariable final Long id) {
-        MenuResponseDto MenuResponseDto = menuService.getMenuById(id);
-        return new ResponseEntity<>(MenuResponseDto, HttpStatus.OK);
+    public RestaurantResponse<MenuResponseDto> getMenu(@PathVariable final Long id) {
+        MenuResponseDto menuResponseDto = menuService.getMenuById(id);
+        RestaurantResponse response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        return response;
     }
     @GetMapping("/getAll")
-    public ResponseEntity<List<MenuResponseDto>> getMenus() {
-        List<MenuResponseDto> MenuResponseDtos = menuService.getMenus();
-        return new ResponseEntity<>(MenuResponseDtos, HttpStatus.OK);
+    public RestaurantResponse<List<MenuResponseDto>> getMenus() {
+        List<MenuResponseDto> menuResponseDtos = menuService.getMenus();
+        RestaurantResponse response = new RestaurantResponse(menuResponseDtos,"Add successfully", HttpStatus.OK);
+        return response;
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<MenuResponseDto> deleteMenu(@PathVariable final Long id) {
-        MenuResponseDto MenuResponseDto = menuService.deleteMenu(id);
-        return new ResponseEntity<>(MenuResponseDto, HttpStatus.OK);
+    public RestaurantResponse<MenuResponseDto> deleteMenu(@PathVariable final Long id) {
+        MenuResponseDto menuResponseDto = menuService.deleteMenu(id);
+        RestaurantResponse response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        return response;
     }
     @PostMapping("/edit/{id}")
-    public ResponseEntity<MenuResponseDto> editMenu(@PathVariable final Long id,
+    public RestaurantResponse<MenuResponseDto> editMenu(@PathVariable final Long id,
                                                         @RequestBody final MenuRequestDto MenuRequestDto) {
-        MenuResponseDto MenuResponseDto = menuService.editMenu(id,MenuRequestDto);
-        return new ResponseEntity<>(MenuResponseDto, HttpStatus.OK);
+        MenuResponseDto menuResponseDto = menuService.editMenu(id,MenuRequestDto);
+        RestaurantResponse response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        return response;
     }
 }

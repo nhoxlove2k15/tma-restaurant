@@ -3,9 +3,10 @@ package com.example.tmarestaurant.controlller;
 import com.example.tmarestaurant.dto.request.UserRegisterDto;
 import com.example.tmarestaurant.dto.response.UserResponseDto;
 import com.example.tmarestaurant.service.UserService;
+import com.example.tmarestaurant.utils.RestaurantResponse;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,29 +21,35 @@ public class UserController {
         this.userService = userService;
     }
     @PostMapping("/addUser")
-    public ResponseEntity<UserResponseDto> addUser(@RequestBody final UserRegisterDto userRequestDto) {
-        UserResponseDto UserResponseDto = userService.addUser(userRequestDto);
-        return new ResponseEntity<>(UserResponseDto, HttpStatus.OK);
+    public RestaurantResponse<UserResponseDto> addUser(@RequestBody final UserRegisterDto userRequestDto) {
+        UserResponseDto userResponseDto = userService.addUser(userRequestDto);
+        RestaurantResponse response = new RestaurantResponse(userResponseDto,"Add successfully", HttpStatus.OK);
+        return response;
     }
     @GetMapping("get/{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable final Long id) {
-        UserResponseDto UserResponseDto = userService.getUserById(id);
-        return new ResponseEntity<>(UserResponseDto, HttpStatus.OK);
+    public RestaurantResponse<UserResponseDto> getUser(@PathVariable final Long id) {
+        UserResponseDto userResponseDto = userService.getUserById(id);
+        RestaurantResponse response = new RestaurantResponse(userResponseDto,"Add successfully", HttpStatus.OK);
+        return response;
     }
     @GetMapping("/getAll")
-    public ResponseEntity<List<UserResponseDto>> getUsers() {
-        List<UserResponseDto> UserResponseDtos = userService.getUsers();
-        return new ResponseEntity<>(UserResponseDtos, HttpStatus.OK);
+    public RestaurantResponse<List<UserResponseDto>> getUsers() {
+        List<UserResponseDto> userResponseDtos = userService.getUsers();
+        RestaurantResponse response = new RestaurantResponse(userResponseDtos,"Add successfully", HttpStatus.OK);
+        return response;
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<UserResponseDto> deleteUser(@PathVariable final Long id) {
-        UserResponseDto UserResponseDto = userService.deleteUser(id);
-        return new ResponseEntity<>(UserResponseDto, HttpStatus.OK);
+    public RestaurantResponse deleteUser(@PathVariable final Long id) throws JSONException {
+        UserResponseDto userResponseDto = userService.deleteUser(id);
+        RestaurantResponse response = new RestaurantResponse(null,"delete sucessfully", HttpStatus.OK);
+        return response;
     }
     @PostMapping("/edit/{id}")
-    public ResponseEntity<UserResponseDto> editUser(@PathVariable final Long id,
-                                                        @RequestBody final UserRegisterDto userRequestDto) {
-        UserResponseDto UserResponseDto = userService.editUser(id,userRequestDto);
-        return new ResponseEntity<>(UserResponseDto, HttpStatus.OK);
+    public RestaurantResponse editUser(@PathVariable final Long id,
+                                       @RequestBody final UserRegisterDto userRequestDto) {
+
+        RestaurantResponse response = new RestaurantResponse(null,"update sucessfully", HttpStatus.OK);
+
+        return response;
     }
 }

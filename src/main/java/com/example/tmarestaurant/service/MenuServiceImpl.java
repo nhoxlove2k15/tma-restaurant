@@ -27,6 +27,8 @@ public class MenuServiceImpl implements MenuService{
         Menu menu = new Menu();
         menu.setDescription(menuRequestDto.getDescription());
         menu.setPrice(menuRequestDto.getPrice());
+        menu.setName(menuRequestDto.getName());
+        menu.setCategoryId((long) menuRequestDto.getCategoryId());
         // need category repository
 //        menu.setCategory(menuRequs);
         menuRepository.save(menu);
@@ -60,7 +62,7 @@ public class MenuServiceImpl implements MenuService{
     @Override
     public MenuResponseDto deleteMenu(Long menuId) {
         Menu menu = getMenu(menuId);
-        menuRepository.delete(menu);
+        menuRepository.deleteById(menuId);
         return  mapper.menuToMenuResponseDto(menu);
     }
 
@@ -69,7 +71,7 @@ public class MenuServiceImpl implements MenuService{
         Menu menuToEdit = getMenu(menuId);
         menuToEdit.setDescription(menuRequestDto.getDescription());
         menuToEdit.setPrice(menuRequestDto.getPrice());
-
+        menuRepository.save(menuToEdit);
         return mapper.menuToMenuResponseDto(menuToEdit);
     }
 }

@@ -20,11 +20,22 @@ public class Comment {
     @Column(name = "is_toxic")
     private boolean isToxic;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id",updatable = false,insertable = false)
     private Menu menu;
+
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "menu_id")
+    private Long menuId;
+
+    public Comment(String content, Long userId, Long menuId) {
+        this.content = content;
+        this.userId = userId;
+        this.menuId = menuId;
+    }
 }
