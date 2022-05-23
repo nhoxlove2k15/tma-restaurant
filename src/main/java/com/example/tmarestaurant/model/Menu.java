@@ -22,8 +22,7 @@ public class Menu {
     @Column(name = "price")
     private double price;
     @Column(name = "images", columnDefinition = "json")
-    @JsonRawValue
-    private List<String> images;
+    private String images;
     @Column(name = "point")
     private double point;
     @Column(name = "liked_count")

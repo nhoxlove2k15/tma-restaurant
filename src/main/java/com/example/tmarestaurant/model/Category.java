@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +16,6 @@ public class Category {
     private Long id;
     @Column(name = "name")
     private String name;
-    @OneToMany
-    private Menu menu;
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Menu> menus;
 }
