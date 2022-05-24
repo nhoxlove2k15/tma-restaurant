@@ -1,7 +1,11 @@
 package com.example.tmarestaurant.dto;
 
+import com.example.tmarestaurant.dto.request.BillDetailRequestDto;
+import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.dto.response.UserResponseDto;
+import com.example.tmarestaurant.model.Bill;
+import com.example.tmarestaurant.model.BillDetail;
 import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.User;
 
@@ -49,5 +53,35 @@ public class mapper {
             menuResponseDtos.add(menuToMenuResponseDto(menu));
         }
         return menuResponseDtos;
+    }
+
+    public static BillResponseDto billToBillResponseDto(Bill bill) {
+        BillResponseDto billResponseDto = new BillResponseDto();
+
+        billResponseDto.setId(bill.getId());
+        billResponseDto.setTotalprice(bill.getTotalprice());
+        billResponseDto.setBillDetails(bill.getBillDetails());
+//        billResponseDto.setUser(bill.getUser());
+
+        return  billResponseDto;
+    }
+
+    public static List<BillResponseDto> billsToResponseDtos(List<Bill> bills) {
+        List<BillResponseDto> billResponseDtos = new ArrayList<>();
+        for (Bill bill : bills) {
+            billResponseDtos.add(billToBillResponseDto(bill));
+        }
+        return billResponseDtos;
+    }
+    public static BillDetail billDetailRequestToBillDetail(BillDetailRequestDto billDetailRequestDto) {
+        BillDetail billDetail = new BillDetail();
+        billDetail.setDiscount(billDetailRequestDto.getDiscount());
+        billDetail.setId(billDetailRequestDto.getId());
+        billDetail.setMenuOrigin(billDetailRequestDto.getMenuOrigin());
+        System.out.println("================================" + billDetailRequestDto.toString());
+//        System.out.println("================================" + billDetailRequestDto.);
+
+        System.out.println("================================" + billDetail.toString());
+        return billDetail;
     }
 }

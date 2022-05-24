@@ -104,8 +104,8 @@ public class MenuConfig {
                     4L
 
             );
-            numberOne.getImagesjson().add(new MenuOrigin(numberOne.getName(),numberOne.getDescription(),numberOne.getPrice()));
-            numberOne.getImagesjson().add(new MenuOrigin(noodles.getName(),noodles.getDescription(),noodles.getPrice()));
+            numberOne.getImagesjson().add(new MenuOrigin(numberOne.getName(),numberOne.getDescription(),numberOne.getPrice(),2));
+            numberOne.getImagesjson().add(new MenuOrigin(noodles.getName(),noodles.getDescription(),noodles.getPrice(),2));
 //            numberOne.getImagesjson().add("789");
             menuRepository.saveAll(Arrays.asList(pizza,coca,whitskey,noodles,pepsi,egg,rice,hambuger,chicken,tiger,numberOne));
 //            menuRepository.save(pizza);

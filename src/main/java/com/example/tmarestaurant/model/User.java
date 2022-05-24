@@ -30,7 +30,7 @@ public class User {
     @Column(name = "role")
     private UserRole role = UserRole.CUSTOMER;
 
-    @OneToMany( mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany( mappedBy = "user", fetch = FetchType.LAZY)
     private List<Bill> bills = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
