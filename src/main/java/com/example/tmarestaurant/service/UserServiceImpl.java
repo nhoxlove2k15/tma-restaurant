@@ -6,6 +6,7 @@ import com.example.tmarestaurant.dto.response.UserResponseDto;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.stream.StreamSupport;
 @Service
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
+    private LikeService likeService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(@Lazy UserRepository userRepository, @Lazy LikeService likeService) {
         this.userRepository = userRepository;
+        this.likeService = likeService;
     }
 
     @Override
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(
                         () -> new IllegalArgumentException("user with id: " + userId + " could ot be found")
                 );
+//        user.setM
         return user;
     }
 

@@ -2,12 +2,10 @@ package com.example.tmarestaurant.dto;
 
 import com.example.tmarestaurant.dto.request.BillDetailRequestDto;
 import com.example.tmarestaurant.dto.response.BillResponseDto;
+import com.example.tmarestaurant.dto.response.LikeResponseDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.dto.response.UserResponseDto;
-import com.example.tmarestaurant.model.Bill;
-import com.example.tmarestaurant.model.BillDetail;
-import com.example.tmarestaurant.model.Menu;
-import com.example.tmarestaurant.model.User;
+import com.example.tmarestaurant.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +17,11 @@ public class mapper {
         userResponseDto.setId(user.getId());
         userResponseDto.setFullname(user.getFullname());
         userResponseDto.setUsername(user.getUsername());
-        userResponseDto.setBills(user.getBills());
-        userResponseDto.setComments(user.getComments());
+//        userResponseDto.setBills(user.getBills());
+//        userResponseDto.setComments(user.getComments());
+//        userResponseDto.setRatings(user.getRatings());
+
         userResponseDto.setRole(user.getRole());
-        userResponseDto.setRatings(user.getRatings());
         userResponseDto.setPhone(user.getPhone());
         return userResponseDto;
     }
@@ -40,10 +39,12 @@ public class mapper {
         menuResponseDto.setCategory(menu.getCategory());
         menuResponseDto.setDescription(menu.getDescription());
         menuResponseDto.setImages(menu.getImages());
-        menuResponseDto.setComments(menu.getComments());
-        menuResponseDto.setLikes(menu.getLikes());
-        menuResponseDto.setRatings(menu.getRatings());
+//        menuResponseDto.setComments(menu.getComments());
+//        menuResponseDto.setRatings(menu.getRatings());
+
+//        menuResponseDto.setLikes(menu.getLikes());
         menuResponseDto.setPrice(menu.getPrice());
+        menuResponseDto.setLikedCount(menu.getLikedCount());
 
         return menuResponseDto;
     }
@@ -78,10 +79,28 @@ public class mapper {
         billDetail.setDiscount(billDetailRequestDto.getDiscount());
         billDetail.setId(billDetailRequestDto.getId());
         billDetail.setMenuOrigin(billDetailRequestDto.getMenuOrigin());
-        System.out.println("================================" + billDetailRequestDto.toString());
-//        System.out.println("================================" + billDetailRequestDto.);
-
-        System.out.println("================================" + billDetail.toString());
         return billDetail;
+    }
+
+    public static LikeResponseDto likeToLikeResponseDto(Like like) {
+        LikeResponseDto likeResponseDto = new LikeResponseDto();
+//        MenuResponseDto re = menuToMenuResponseDto(like.getMenu());
+        System.out.println("===============================================" + like.getMenu() );
+
+        likeResponseDto.setMenu(like.getMenu());
+        System.out.println("===============================================" + likeResponseDto.getMenu() );
+
+//        System.out.println("===============================================" + re );
+
+        return likeResponseDto;
+    }
+    public static List<LikeResponseDto> likeResponseDtos (List<Like> likes) {
+        List<LikeResponseDto> likeResponseDtos = new ArrayList<>();
+
+        for (Like like : likes) {
+            likeResponseDtos.add(likeToLikeResponseDto(like));
+        }
+        System.out.println("===============================================" + "likes menus ");
+        return likeResponseDtos;
     }
 }

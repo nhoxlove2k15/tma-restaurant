@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 @Configuration
 public class MenuConfig {
@@ -100,7 +101,7 @@ public class MenuConfig {
                     "yellow softdrink",
                     25.0d,
                     "url4",
-                    new ArrayList<>(),
+                    new HashSet<>(),
                     4L
 
             );

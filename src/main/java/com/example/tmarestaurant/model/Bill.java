@@ -27,7 +27,7 @@ public class Bill {
     @Column(name = "user_id")
     private Long userId;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "bill_details_id", updatable = false, insertable = false)
     private BillDetail billDetails;
     @Column(name = "bill_details_id")
