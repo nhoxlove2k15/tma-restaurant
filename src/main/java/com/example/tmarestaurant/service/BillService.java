@@ -5,13 +5,17 @@ import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.model.Bill;
 
 import java.util.List;
+import java.util.Set;
+
 
 public interface BillService {
-    public BillResponseDto addBill(BillRequestDto billRequestDto);
-    public BillResponseDto getBillById(Long billId);
-    public Bill getBill(Long billId);
-    public List<BillResponseDto> getBills();
-    public BillResponseDto deleteBill(Long billId);
-    public BillResponseDto editBill(Long billId, BillRequestDto billRequestDto);
+    BillResponseDto addBill(BillRequestDto billRequestDto);
+    BillResponseDto getBillById(Long billId);
+    Bill getBill(Long billId);
+    List<Bill> getBillsByUser(Long userId);
+    List<BillResponseDto> getBills();
+
+    void deleteBill(Long billId);
+    void editBill(Long billId, BillRequestDto billRequestDto);
 
 }

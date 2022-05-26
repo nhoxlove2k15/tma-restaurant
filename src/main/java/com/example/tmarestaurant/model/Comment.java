@@ -11,7 +11,15 @@ import javax.persistence.*;
 @Table(name = "menu_comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "comment_sequence",
+            sequenceName = "comment_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "comment_sequence"
+    )
     private Long id;
     @Column(name = "content", columnDefinition = "text")
     private String content;

@@ -10,12 +10,12 @@ import com.example.tmarestaurant.model.Menu;
 import java.util.List;
 
 public interface MenuService {
-    public MenuResponseDto addMenu(MenuRequestDto menuRequestDto);
-    public MenuResponseDto getMenuById(Long menuId);
-    public Menu getMenu(Long menuId);
-    public List<MenuResponseDto> getMenus();
-    public MenuResponseDto deleteMenu(Long menuId);
-    public MenuResponseDto editMenu(Long menuId, MenuRequestDto menuRequestDto);
+    MenuResponseDto addMenu(MenuRequestDto menuRequestDto);
+    MenuResponseDto getMenuById(Long menuId);
+    Menu getMenu(Long menuId);
+    List<MenuResponseDto> getMenus();
+    void deleteMenu(Long menuId);
+    void editMenu(Long menuId, MenuRequestDto menuRequestDto);
 //    public BillResponseDto addAuthorToBill(Long BillId, Long authorId);
 //    public BillResponseDto deleteAuthorFromBill(Long BillId, Long authorId);
 //    public BillResponseDto addCategoryToBill(Long BillId, Long categoryId);

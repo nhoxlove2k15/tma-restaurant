@@ -3,10 +3,12 @@ package com.example.tmarestaurant.service;
 import com.example.tmarestaurant.dto.mapper;
 import com.example.tmarestaurant.dto.request.LikeRequestDto;
 import com.example.tmarestaurant.dto.response.LikeResponseDto;
+import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Like;
 import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.LikeRepository;
+import com.example.tmarestaurant.utils.MyConstant;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -39,14 +41,24 @@ public class LikeServiceImpl implements LikeService {
     public LikeResponseDto addLike(LikeRequestDto likeRequestDto) {
         Long userId = likeRequestDto.getUserId();
         Long menuId = likeRequestDto.getMenuId();
-//        User user = userService.getUser(userId);
-//        Menu menu = menuService.getMenu(menuId);
+        List<Like> likes = likeRepository.findAll().stream()
+                .filter(c1 -> c1.getUser().getId() == userId && c1.getMenu().getId() == menuId)
+                .collect(Collectors.toList());
+//        System.out.println("=================================== comment service" + comments);
+        if (likes.size() != 0) {
+            throw new IllegalStateException(MyConstant.LIKE_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+        }
         Like like = new Like();
 
 
-            like.getMenu().setId(menuId);
-            like.getUser().setId(userId);
+        like.getMenu().setId(menuId);
+        like.getUser().setId(userId);
+        try {
             likeRepository.save(like);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.LIKE_ENTITY);
+        }
+
 
         return mapper.likeToLikeResponseDto(like);
     }
@@ -72,7 +84,7 @@ public class LikeServiceImpl implements LikeService {
 //
 //
 //            }
-        System.out.println("=============================================== like service " + 1);
+//        System.out.println("=============================================== like service " + 1);
 
 //        Like like = em.createQuery("SELECT a FROM Author a LEFT JOIN FETCH a.books", Author.class).getResultList();
         List<Like> likes = likeRepository.findAll();
@@ -99,16 +111,15 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public LikeResponseDto deleteLike(LikeRequestDto likeRequestDto) {
+    public void deleteLike(LikeRequestDto likeRequestDto) {
         Long userId = likeRequestDto.getUserId();
         Long menuId = likeRequestDto.getMenuId();
+        try {
+            likeRepository.deleteLikesByIds(userId,menuId);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.LIKE_ENTITY);
 
-        Like like = new Like();
-
-        likeRepository.deleteLikesByIds(userId,menuId);
-
-
-        return mapper.likeToLikeResponseDto(like);
+        }
     }
 
     @Override
@@ -117,12 +128,13 @@ public class LikeServiceImpl implements LikeService {
         Map<Long,Long>map = new HashMap();
 
 //        if (menu != null) {
+        try {
             var result = likeRepository.getCount(menuId);
-            if(result != null && !result.isEmpty()){
+            if (result != null && !result.isEmpty()) {
 
                 for (Object[] object : result) {
 
-                    map.put( ((BigInteger) object[1]).longValue() , ( (BigInteger) object[0]).longValue())  ;
+                    map.put(((BigInteger) object[1]).longValue(), ((BigInteger) object[0]).longValue());
                 }
             }
 //            System.out.println("============================" + map.toString() + "============================");
@@ -131,13 +143,16 @@ public class LikeServiceImpl implements LikeService {
 //            System.out.println("======================================== a" + a.toString() + a.get(0).toString() + a.get(0).getClass() );
 
 //        }
-        int likedCount = 0 ;
-        if (map.get(menuId) != null ){
-            likedCount = map.get(menuId).intValue();
+            int likedCount = 0;
+            if (map.get(menuId) != null) {
+                likedCount = map.get(menuId).intValue();
 //            System.out.println("==================================" + likedCount);
 
+            }
+            return likedCount;
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.LIKE_ENTITY);
         }
-        return likedCount;
     }
 
     @Override

@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class RatingResponseDto {
+    @JsonAlias(value = "id")
+    private Long id;
     // We can see rating from Menu or User so it responses 2 entity
     @JsonAlias(value = "menu")
     private Menu menu;

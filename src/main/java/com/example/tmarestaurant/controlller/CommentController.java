@@ -24,14 +24,30 @@ public class CommentController {
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<CommentResponseDto> addComment(@RequestBody final CommentRequestDto commentRequestDto) {
-        CommentResponseDto commentResponseDto = commentService.addComment(commentRequestDto);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+    public RestaurantResponse<CommentResponseDto> addComment(@RequestBody final CommentRequestDto commentRequestDto) {
+        CommentResponseDto commentResponseDto;
+        RestaurantResponse response ;
+        try {
+            commentResponseDto = commentService.addComment(commentRequestDto);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST, e.getMessage());
+            return response;
+        }
+        response = new RestaurantResponse(commentResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        return response;
     }
     @GetMapping("get/{id}")
     public RestaurantResponse<CommentResponseDto> getComment(@PathVariable final Long id) {
-        CommentResponseDto commentResponseDto = commentService.getCommentById(id);
-        RestaurantResponse response = new RestaurantResponse(commentResponseDto,"Add successfully", HttpStatus.OK);
+        CommentResponseDto commentResponseDto;
+        RestaurantResponse response;
+        try {
+            commentResponseDto = commentService.getCommentById(id);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Get failed", HttpStatus.BAD_REQUEST, e.getMessage());
+            return response;
+        }
+
+        response = new RestaurantResponse(commentResponseDto,"Add successfully", HttpStatus.OK);
         return response;
     }
     @GetMapping("/getAll")
@@ -42,15 +58,31 @@ public class CommentController {
     }
     @DeleteMapping("/delete/{id}")
     public RestaurantResponse<CommentResponseDto> deleteComment(@RequestBody final CommentRequestDto commentRequestDto) {
-        CommentResponseDto commentResponseDto = commentService.deleteComment(commentRequestDto);
-        RestaurantResponse response = new RestaurantResponse(commentResponseDto,"Add successfully", HttpStatus.OK);
+
+        RestaurantResponse response ;
+        try {
+            commentService.deleteComment(commentRequestDto);
+        } catch (Exception exception) {
+            response = new RestaurantResponse(null,"Failed", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+
+         response = new RestaurantResponse(null,"Delete successfully", HttpStatus.OK);
         return response;
     }
     @PostMapping("/edit/{id}")
     public RestaurantResponse<CommentResponseDto> editComment(@PathVariable final Long id,
-                                                            @RequestBody final CommentRequestDto CommentRequestDto) {
-        CommentResponseDto commentResponseDto = commentService.editComment(id,CommentRequestDto);
-        RestaurantResponse response = new RestaurantResponse(commentResponseDto,"Add successfully", HttpStatus.OK);
+                                                            @RequestBody final CommentRequestDto commentRequestDto) {
+        RestaurantResponse response ;
+        try {
+            commentService.editComment(id,commentRequestDto);
+
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Update failed", HttpStatus.BAD_REQUEST, e.getMessage());
+            return response;
+        }
+
+        response = new RestaurantResponse(id,"Add successfully", HttpStatus.OK);
         return response;
     }
 }

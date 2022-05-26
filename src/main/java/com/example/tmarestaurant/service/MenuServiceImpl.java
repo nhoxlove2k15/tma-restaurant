@@ -3,9 +3,11 @@ package com.example.tmarestaurant.service;
 import com.example.tmarestaurant.dto.mapper;
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
+import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.MenuRepository;
+import com.example.tmarestaurant.utils.MyConstant;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -49,12 +51,26 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public MenuResponseDto addMenu(MenuRequestDto menuRequestDto) {
+        String name = menuRequestDto.getName();
+        List<Menu> menus = menuRepository.findAll().stream()
+                .filter(c1 -> c1.getName().equals(name) )
+                .collect(Collectors.toList());
+//        System.out.println("=================================== comment service" + comments);
+        if (menus.size() != 0) {
+            throw new IllegalStateException(MyConstant.MENU_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+        }
         Menu menu = new Menu();
         menu.setDescription(menuRequestDto.getDescription());
         menu.setPrice(menuRequestDto.getPrice());
+        menu.setName(menuRequestDto.getName());
         // need category repository
 //        menu.setCategory(menuRequs);
-        menuRepository.save(menu);
+        menu.getCategory().setId((long) menuRequestDto.getCategoryId());
+        try {
+            menuRepository.save(menu);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+        }
         return mapper.menuToMenuResponseDto(menu);
     }
 
@@ -70,13 +86,18 @@ public class MenuServiceImpl implements MenuService{
     public Menu getMenu(Long menuId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(
-                        () -> new IllegalArgumentException("menu with id " + menuId + " could not be found")
+                        () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.MENU_ENTITY)
                 );
-        System.out.println("========================================================================================" + 1);
-
-        System.out.println("========================================================================================" + 2);
+//        System.out.println("========================================================================================" + 1);
+//
+//        System.out.println("========================================================================================" + 2);
         menu.setLikedCount(likeService.getLikedCount(menu.getId()));
-        menuRepository.save(menu);
+        try {
+            menuRepository.save(menu);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+
+        }
 
         return menu;
     }
@@ -92,19 +113,28 @@ public class MenuServiceImpl implements MenuService{
     }
 
     @Override
-    public MenuResponseDto deleteMenu(Long menuId) {
-        Menu menu = getMenu(menuId);
-        menuRepository.deleteById(menuId);
-        return  mapper.menuToMenuResponseDto(menu);
+    public void deleteMenu(Long menuId) {
+        try {
+            menuRepository.deleteById(menuId);
+
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+        }
+
     }
 
     @Override
-    public MenuResponseDto editMenu(Long menuId, MenuRequestDto menuRequestDto) {
+    public void editMenu(Long menuId, MenuRequestDto menuRequestDto) {
         Menu menuToEdit = getMenu(menuId);
         menuToEdit.setDescription(menuRequestDto.getDescription());
         menuToEdit.setPrice(menuRequestDto.getPrice());
-        menuRepository.save(menuToEdit);
+        try {
+            menuRepository.save(menuToEdit);
 
-        return mapper.menuToMenuResponseDto(menuToEdit);
+
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+        }
+
     }
 }

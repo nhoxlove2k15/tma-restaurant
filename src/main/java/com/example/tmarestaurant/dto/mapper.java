@@ -15,7 +15,7 @@ public class mapper {
         userResponseDto.setId(user.getId());
         userResponseDto.setFullname(user.getFullname());
         userResponseDto.setUsername(user.getUsername());
-//        userResponseDto.setBills(user.getBills());
+        userResponseDto.setBills(user.getBills());
         userResponseDto.setComments(user.getComments());
         userResponseDto.setRatings(user.getRatings());
         userResponseDto.setLikes(user.getLikes());
@@ -38,6 +38,7 @@ public class mapper {
         menuResponseDto.setCategory(menu.getCategory());
         menuResponseDto.setDescription(menu.getDescription());
         menuResponseDto.setImages(menu.getImages());
+        menuResponseDto.setName(menu.getName());
 //        menuResponseDto.setComments(menu.getComments());
 //        menuResponseDto.setRatings(menu.getRatings());
 
@@ -85,7 +86,7 @@ public class mapper {
         LikeResponseDto likeResponseDto = new LikeResponseDto();
 //        MenuResponseDto re = menuToMenuResponseDto(like.getMenu());
         System.out.println("===============================================" + like.getMenu() );
-
+        likeResponseDto.setId(like.getId());
         likeResponseDto.setMenu(like.getMenu());
         System.out.println("===============================================" + likeResponseDto.getMenu() );
 
@@ -107,6 +108,7 @@ public class mapper {
         RatingResponseDto ratingResponseDto = new RatingResponseDto();
         ratingResponseDto.setUser(rating.getUser());
         ratingResponseDto.setMenu(rating.getMenu());
+        ratingResponseDto.setId(rating.getId());
         return ratingResponseDto;
     }
 
@@ -125,6 +127,7 @@ public class mapper {
         commentResponseDto.setPoint(comment.getPoint());
         commentResponseDto.setMenu(comment.getMenu());
         commentResponseDto.setUser(comment.getUser());
+        commentResponseDto.setId(comment.getId());
         return commentResponseDto;
     }
 

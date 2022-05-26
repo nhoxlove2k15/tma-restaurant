@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class CommentResponseDto {
 
+    @JsonAlias(value = "id")
+    private Long id;
     @JsonAlias(value = "content")
     private String content;
     @JsonAlias(value = "point")

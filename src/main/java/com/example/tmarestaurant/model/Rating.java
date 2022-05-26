@@ -12,7 +12,15 @@ import javax.persistence.*;
 @Table(name = "menu_ratings")
 public class Rating {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "rating_sequence",
+            sequenceName = "rating_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "rating_sequence"
+    )
     private Long id;
 
     @Column(name = "point")

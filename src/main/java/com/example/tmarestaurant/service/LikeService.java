@@ -19,7 +19,7 @@ public interface LikeService {
 //    LikeResponseDto getLikeById(Long billId);
 //    LikeResponseDto getLike(Long billId);
     List<Like> getLikes(Long userId);
-    LikeResponseDto deleteLike(LikeRequestDto likeRequestDto);
+    void deleteLike(LikeRequestDto likeRequestDto);
     int getLikedCount(Long menuId);
     Set<Menu> getMenuLikedByUser(Long userId);
 

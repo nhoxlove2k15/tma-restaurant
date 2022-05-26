@@ -14,6 +14,8 @@ import java.util.List;
 @RequestMapping("/like")
 public class LikeController {
     private final LikeService likeService;
+    private LikeResponseDto likeResponseDto;
+    private RestaurantResponse response;
 
     @Autowired
     public LikeController(LikeService likeService) {
@@ -22,8 +24,14 @@ public class LikeController {
 
     @PostMapping("/addLike")
     public RestaurantResponse<LikeResponseDto> getLike(@RequestBody final LikeRequestDto likeRequestDto) {
-        LikeResponseDto likeResponseDto = likeService.addLike(likeRequestDto);
-        RestaurantResponse response = new RestaurantResponse(null, "Add successfully", HttpStatus.OK);
+        try {
+            likeResponseDto = likeService.addLike(likeRequestDto);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null, "Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+
+        }
+        response = new RestaurantResponse(likeResponseDto.getId(), "Add successfully", HttpStatus.OK);
         return response;
     }
 
@@ -35,13 +43,28 @@ public class LikeController {
     }
     @DeleteMapping("/delete")
     public RestaurantResponse deleteLike(@RequestBody final LikeRequestDto likeRequestDto) {
-        LikeResponseDto likeResponseDto = likeService.deleteLike(likeRequestDto);
-        RestaurantResponse response = new RestaurantResponse(null, "Delete successfully", HttpStatus.OK);
+        try {
+            likeService.deleteLike(likeRequestDto);
+
+        } catch (Exception e) {
+            response = new RestaurantResponse(null, "Delete successfully", HttpStatus.BAD_REQUEST);
+            return response;
+
+        }
+        response = new RestaurantResponse(null, "Delete successfully", HttpStatus.OK);
         return response;
+
     }
     @GetMapping("/getCount/{id}")
     public RestaurantResponse getLikedCount(@PathVariable final Long id) {
-        int count = likeService.getLikedCount(id);
+        int count ;
+        try {
+            count = likeService.getLikedCount(id);
+
+        } catch (Exception e) {
+            RestaurantResponse response = new RestaurantResponse(null,"Liked Count by menu_id", HttpStatus.BAD_REQUEST);
+            return response;
+        }
         RestaurantResponse response = new RestaurantResponse(count,"Liked Count by menu_id", HttpStatus.OK);
         return response;
     }

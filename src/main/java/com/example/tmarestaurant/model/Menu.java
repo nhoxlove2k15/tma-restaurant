@@ -21,9 +21,17 @@ import java.util.Set;
 @Table(name = "menus")
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "menu_sequence",
+            sequenceName = "menu_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "menu_sequence"
+    )
     private Long id;
-    @Column(name= "name")
+    @Column(name= "name",unique = true)
     private String name;
     @Column(name = "description", columnDefinition = "text")
     private String description;
@@ -53,10 +61,13 @@ public class Menu {
 
 
 
+
 //    @Column(name = "category_id")
 //    private Long categoryId;
 
     private Category category = new Category();
+
+
 
     public Long getId() {
         return id;

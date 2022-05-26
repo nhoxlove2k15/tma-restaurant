@@ -16,20 +16,34 @@ import java.util.List;
 @RequestMapping("/rating")
 public class RatingController {
     private final RatingService ratingService;
-
+    private RatingResponseDto ratingResponseDto;
+    private RestaurantResponse response ;
     @Autowired
     public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
     }
     @PostMapping("/addRating")
-    public ResponseEntity<RatingResponseDto> addRating(@RequestBody final RatingRequestDto ratingRequestDto) {
-        RatingResponseDto ratingResponseDto = ratingService.addRating(ratingRequestDto);
-        return new ResponseEntity<>(ratingResponseDto, HttpStatus.OK);
+    public RestaurantResponse<RatingResponseDto> addRating(@RequestBody final RatingRequestDto ratingRequestDto) {
+
+
+        try {
+            ratingResponseDto = ratingService.addRating(ratingRequestDto);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"add Failed", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+        response = new RestaurantResponse(ratingResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        return response;
     }
     @GetMapping("get/{id}")
     public RestaurantResponse<RatingResponseDto> getRating(@PathVariable final Long id) {
-        RatingResponseDto ratingResponseDto = ratingService.getRatingById(id);
-        RestaurantResponse response = new RestaurantResponse(ratingResponseDto,"Add successfully", HttpStatus.OK);
+        try {
+            ratingResponseDto = ratingService.getRatingById(id);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+        response = new RestaurantResponse(ratingResponseDto,"Add successfully", HttpStatus.OK);
         return response;
     }
     @GetMapping("/getAll")
@@ -40,15 +54,25 @@ public class RatingController {
     }
     @DeleteMapping("/delete/{id}")
     public RestaurantResponse<RatingResponseDto> deleteRating(@PathVariable final Long id) {
-        RatingResponseDto ratingResponseDto = ratingService.deleteRating(id);
-        RestaurantResponse response = new RestaurantResponse(ratingResponseDto,"Add successfully", HttpStatus.OK);
+        try {
+            ratingService.deleteRating(id);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+        }
+
+        response = new RestaurantResponse(null,"Add successfully", HttpStatus.OK);
         return response;
     }
     @PostMapping("/edit/{id}")
     public RestaurantResponse<RatingResponseDto> editRating(@PathVariable final Long id,
                                                         @RequestBody final RatingRequestDto RatingRequestDto) {
-        RatingResponseDto ratingResponseDto = ratingService.editRating(id,RatingRequestDto);
-        RestaurantResponse response = new RestaurantResponse(ratingResponseDto,"Add successfully", HttpStatus.OK);
+        try {
+            ratingService.editRating(id,RatingRequestDto);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+        response = new RestaurantResponse(id,"Add successfully", HttpStatus.OK);
         return response;
     }
 }

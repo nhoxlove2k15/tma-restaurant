@@ -14,7 +14,15 @@ import javax.persistence.*;
 
 public class Like {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "like_sequence",
+            sequenceName = "like_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "like_sequence"
+    )
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

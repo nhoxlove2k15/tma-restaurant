@@ -16,6 +16,6 @@ public interface CommentService {
     List<Comment> getCommentsByUser(Long userId);
     List<Comment> getCommentsByMenu(Long menuId);
 
-    CommentResponseDto deleteComment(CommentRequestDto commentRequestDto);
-    CommentResponseDto editComment(Long commentId, CommentRequestDto commentRequestDto);
+    void deleteComment(CommentRequestDto commentRequestDto);
+    void editComment(Long commentId, CommentRequestDto commentRequestDto);
 }

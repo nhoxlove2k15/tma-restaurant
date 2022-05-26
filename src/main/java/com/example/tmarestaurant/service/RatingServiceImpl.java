@@ -6,6 +6,7 @@ import com.example.tmarestaurant.dto.response.RatingResponseDto;
 import com.example.tmarestaurant.model.*;
 import com.example.tmarestaurant.repository.LikeRepository;
 import com.example.tmarestaurant.repository.RatingRepository;
+import com.example.tmarestaurant.utils.MyConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,13 +32,24 @@ public class RatingServiceImpl implements RatingService {
         Long userId = ratingRequestDto.getUserId();
         Long menuId = ratingRequestDto.getMenuId();
 
+        List<Rating> ratingss = ratingRepository.findAll().stream()
+                .filter(c1 -> c1.getUser().getId() == userId && c1.getMenu().getId() == menuId)
+                .collect(Collectors.toList());
+//        System.out.println("=================================== comment service" + comments);
+        if (ratingss.size() != 0) {
+            throw new IllegalStateException(MyConstant.RATING_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+        }
         Rating rating = new Rating();
 
 
-            rating.getMenu().setId(menuId);
-            rating.getUser().setId(userId);
-            rating.setPoint(ratingRequestDto.getPoint());
+        rating.getMenu().setId(menuId);
+        rating.getUser().setId(userId);
+        rating.setPoint(ratingRequestDto.getPoint());
+        try {
             ratingRepository.save(rating);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.RATING_ENTITY);
+        }
 
         return mapper.ratingToRatingResponseDto(rating);
     }
@@ -49,7 +61,9 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating getRating(Long ratingId) {
-        Rating rating = ratingRepository.findById(ratingId).get();
+        Rating rating = ratingRepository.findById(ratingId).orElseThrow(
+                () -> new IllegalStateException(MyConstant.ERR_GET_ENTITY + MyConstant.RATING_ENTITY)
+        );
         return rating;
     }
 
@@ -65,7 +79,7 @@ public class RatingServiceImpl implements RatingService {
                 results.add(rating);
             }
         }
-        System.out.println("----------------------------------------------- rating service size " + results.size());
+//        System.out.println("----------------------------------------------- rating service size " + results.size());
 //        System.out.println("----------------------------------------------- rating service size " + results.get(0).getMenu());
 
         return results;
@@ -87,10 +101,15 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingResponseDto deleteRating(Long ratingId) {
-        Rating rating = new Rating();
-        ratingRepository.deleteById(ratingId);
-        return mapper.ratingToRatingResponseDto(rating);
+    public void deleteRating(Long ratingId) {
+//        Rating rating = new Rating();
+        try {
+            ratingRepository.deleteById(ratingId);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.RATING_ENTITY);
+
+        }
+//        return mapper.ratingToRatingResponseDto(rating);
     }
 
 
@@ -111,12 +130,16 @@ public class RatingServiceImpl implements RatingService {
 
 
     @Override
-    public RatingResponseDto editRating(Long ratingId, RatingRequestDto ratingRequestDto) {
+    public void editRating(Long ratingId, RatingRequestDto ratingRequestDto) {
         Rating ratingToEdit = getRating(ratingId);
         ratingToEdit.setPoint(ratingRequestDto.getPoint());
+        try {
+            ratingRepository.save(ratingToEdit);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
 
-        ratingRepository.save(ratingToEdit);
-        return mapper.ratingToRatingResponseDto(ratingToEdit);
+        }
+//        return mapper.ratingToRatingResponseDto(ratingToEdit);
 
     }
 }

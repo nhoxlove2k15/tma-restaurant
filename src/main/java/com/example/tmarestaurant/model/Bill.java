@@ -1,18 +1,26 @@
 package com.example.tmarestaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
-@Entity(name = "bills")
-//@Table(name = "bills")
-@Table
+
+
+@Entity
+@Table(name = "bills")
 public class Bill {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "bill_sequence",
+            sequenceName = "bill_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "bill_sequence"
+    )
     private Long id ;
 
 //    @ManyToOne(fetch = FetchType.EAGER)
@@ -22,20 +30,24 @@ public class Bill {
 //    private Long categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id",insertable = false, updatable = false )
-    private User user;
-    @Column(name = "user_id")
-    private Long userId;
+    @JoinColumn(name="user_id" )
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private User user ;
+//    @Column(name = "user_id")
+//    private Long userId ;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bill_details_id", updatable = false, insertable = false)
-    private BillDetail billDetails;
-    @Column(name = "bill_details_id")
-    private Long billDetailsId;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "bill_details_id")
+    private BillDetail billDetails = new BillDetail();
+//    @Column(name = "bill_details_id")
+//    private Long billDetailsId;
 
     @Column(name = "totalprice")
     private double totalprice;
 
+    public Bill() {
+        this.user = new User();
+    }
 
     public Bill(User user, BillDetail billDetails, double totalprice) {
         this.user = user;
@@ -44,8 +56,39 @@ public class Bill {
     }
 
     public Bill(Long userId,  Long billDetailsId) {
-        this.userId = userId;
-        this.billDetailsId = billDetailsId;
+        this.getUser().setId(userId);
+        this.getBillDetails().setId(billDetailsId);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BillDetail getBillDetails() {
+        return billDetails;
+    }
+
+    public void setBillDetails(BillDetail billDetails) {
+        this.billDetails = billDetails;
+    }
+
+    public double getTotalprice() {
+        return totalprice;
+    }
+
+    public void setTotalprice(double totalprice) {
+        this.totalprice = totalprice;
+    }
 }

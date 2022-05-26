@@ -9,12 +9,15 @@ import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.CommentRepository;
 import com.example.tmarestaurant.repository.LikeRepository;
+import com.example.tmarestaurant.utils.MyConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -33,17 +36,22 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDto addComment(CommentRequestDto commentRequestDto) {
         Long userId = commentRequestDto.getUserId();
         Long menuId = commentRequestDto.getMenuId();
-//        User user = userService.getUser(userId);
-//        Menu menu = menuService.getMenu(menuId);
+        List<Comment> comments = commentRepository.findAll().stream()
+                .filter(c1 -> c1.getUser().getId() == userId && c1.getMenu().getId() == menuId)
+                .collect(Collectors.toList());
+//        System.out.println("=================================== comment service" + comments);
+        if (comments.size() != 0) {
+            throw new IllegalStateException(MyConstant.COMMENT_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+        }
         Comment comment = new Comment();
-
-
-            comment.getMenu().setId(menuId);
-            comment.getUser().setId(userId);
-            comment.setContent(commentRequestDto.getContent());
-
+        comment.getMenu().setId(menuId);
+        comment.getUser().setId(userId);
+        comment.setContent(commentRequestDto.getContent());
+        try {
             commentRepository.save(comment);
-
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
+        }
         return mapper.commentToCommentResponseDto(comment);
     }
 
@@ -54,16 +62,23 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment getComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).get();
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () ->  new IllegalStateException(MyConstant.ERR_GET_ENTITY + MyConstant.COMMENT_ENTITY)
+        );
 
         return comment;
     }
 
     @Override
     public List<Comment> getCommentsByUser(Long userId) {
+
         List<Comment> comments = StreamSupport
                 .stream(commentRepository.findAll().spliterator(),false)
                 .collect(Collectors.toList());
+//        List<Comment> copyComments = new ArrayList<>();
+//        for (Comment comment : comments) {
+//            copyComments.add(comment);
+//        }
         List<Comment> results = new ArrayList<>();
         for(Comment comment : comments) {
             if(comment.getUser().getId() == userId) {
@@ -98,24 +113,23 @@ public class CommentServiceImpl implements CommentService {
 //    }
 
     @Override
-    public CommentResponseDto deleteComment(CommentRequestDto commentRequestDto) {
-        Long userId = commentRequestDto.getUserId();
-        Long menuId = commentRequestDto.getMenuId();
-        User user = userService.getUser(userId);
-        Menu menu = menuService.getMenu(menuId);
-        Comment comment = new Comment();
-        if (user != null && menu != null) {
+    public void deleteComment(CommentRequestDto commentRequestDto) {
+        try {
             commentRepository.deleteById(commentRequestDto.getId());
-
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
         }
-        return mapper.commentToCommentResponseDto(comment);
     }
 
     @Override
-    public CommentResponseDto editComment(Long commentId, CommentRequestDto commentRequestDto) {
+    public void editComment(Long commentId, CommentRequestDto commentRequestDto) {
         Comment commentToEdit = getComment(commentId);
         commentToEdit.setContent(commentRequestDto.getContent());
-        commentRepository.save(commentToEdit);
-        return mapper.commentToCommentResponseDto(commentToEdit);
+        try {
+            commentRepository.save(commentToEdit);
+
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
+        }
     }
 }

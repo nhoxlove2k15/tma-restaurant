@@ -7,10 +7,16 @@ import com.example.tmarestaurant.model.Bill;
 import com.example.tmarestaurant.model.BillDetail;
 import com.example.tmarestaurant.repository.BillDetailRepository;
 import com.example.tmarestaurant.repository.BillRepository;
+import com.example.tmarestaurant.utils.MenuOrigin;
+import com.example.tmarestaurant.utils.MyConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -25,23 +31,40 @@ public class BillServiceImpl implements BillService{
         this.billDetailRepository = billDetailRepository;
     }
 
+//    @Transactional
     @Override
     public BillResponseDto addBill(BillRequestDto billRequestDto) {
-        BillDetail billDetail = new BillDetail();
-        billDetail = mapper.billDetailRequestToBillDetail(billRequestDto.getBillDetails());
 
 
-        billDetailRepository.save(billDetail);
+        BillDetail billDetail = mapper.billDetailRequestToBillDetail(billRequestDto.getBillDetails());
+        System.out.println("============================================ bill serivce" + billDetail.getMenuOrigin());
+
         Bill bill = new Bill();
-//        bill.setBillDetails(mapper.billDetailRequestToBillDetail(billRequestDto.getBillDetails()));
+//        bill.setId(2L);
+        bill.setId(billRequestDto.getId());
         bill.setTotalprice(billRequestDto.getTotalPrice());
-        bill.setUserId(billRequestDto.getUserId());
+        bill.getUser().setId(billRequestDto.getUserId());
+        bill.getBillDetails().setId(billDetail.getId());
+        double sum = 0 ;
+        for (MenuOrigin menuOrigin : billDetail.getMenuOrigin()) {
+            sum += menuOrigin.getQuantity() * menuOrigin.getPrice();
+        }
+        bill.setTotalprice(sum - sum*billDetail.getDiscount() );
+        System.out.println("============================================ bill serivce" + bill.getBillDetails().getId() );
 
-        bill.setBillDetailsId(billRequestDto.getBillDetails().getId());
+        try {
+            billRepository.save(bill);
 
 
-        billRepository.save(bill);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
+        }
+        try {
+            billDetailRepository.save(billDetail);
 
+        } catch (Exception e) {
+            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_DETAILS_ENTITY);
+        }
 
         return mapper.billToBillResponseDto(bill);
     }
@@ -55,10 +78,25 @@ public class BillServiceImpl implements BillService{
     @Override
     public Bill getBill(Long billId) {
         Bill bill = billRepository.findById(billId).orElseThrow(
-                () -> new IllegalArgumentException("bill with id " + billId + " could not be found")
+                () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.BILL_ENTITY)
         );
         return bill;
 
+    }
+
+    @Override
+    public List<Bill> getBillsByUser(Long userId) {
+        List<Bill> bills = StreamSupport
+                .stream(billRepository.findAll().spliterator(),false)
+                .collect(Collectors.toList());
+        List<Bill> results = new ArrayList<>();
+        for (Bill bill : bills) {
+            if (bill.getUser().getId() == userId) {
+                bill.setUser(null);
+                results.add(bill);
+            }
+        }
+        return results;
     }
 
     @Override
@@ -69,26 +107,34 @@ public class BillServiceImpl implements BillService{
         return mapper.billsToResponseDtos(bills);
     }
 
+//    @Override
+//    public double getTotalPrice() {
+//        List<Bill> bills = billRepository.findAll().set
+//        return 0;
+//    }
+
     @Override
-    public BillResponseDto deleteBill(Long billId) {
-        Bill bill = getBill(billId);
-        billRepository.deleteById(billId);
-        return mapper.billToBillResponseDto(bill);
+    public void deleteBill(Long billId) {
+        try {
+            billRepository.deleteById(billId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
+        }
+
     }
 
     @Override
-    public BillResponseDto editBill(Long billId, BillRequestDto billRequestDto) {
+    public void editBill(Long billId, BillRequestDto billRequestDto) {
 //        Long billDetailId = billRequestDto.getBillDetails().getId();
         BillDetail billDetailToEdit = billDetailRepository.findById(billId - 1 ).orElseThrow(
-                () -> new IllegalArgumentException("billdetail with id " + billId + " could not be found")
+                () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.BILL_DETAILS_ENTITY)
         );
-        System.out.println("bill details : " + billDetailToEdit.toString() );
+
         billDetailToEdit.setDiscount(billRequestDto.getBillDetails().getDiscount());
-        billDetailRepository.save( billDetailToEdit);
-        // for fun
-        Bill billToEdit = getBill(billId);
-//        billToEdit.getBillDetails().setDiscount(billRequestDto.getBillDetails().getDiscount());
-        billRepository.save(billToEdit);
-        return mapper.billToBillResponseDto(billToEdit);
+        try {
+            billDetailRepository.save( billDetailToEdit);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
+        }
     }
 }

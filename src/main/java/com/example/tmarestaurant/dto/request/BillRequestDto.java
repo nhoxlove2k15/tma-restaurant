@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class BillRequestDto {
+    @JsonAlias(value = "id")
+    private Long id;
     @JsonAlias(value = "user_id")
     private Long userId;
     @JsonAlias(value = "total_price")

@@ -16,6 +16,6 @@ public interface RatingService {
     List<Rating> getRatingsByUser(Long userId);
     List<Rating> getRatingsByMenu(Long menuId);
 
-    RatingResponseDto deleteRating(Long ratingId);
-    RatingResponseDto editRating(Long ratingId, RatingRequestDto ratingRequestDto);
+    void deleteRating(Long ratingId);
+    void editRating(Long ratingId, RatingRequestDto ratingRequestDto);
 }

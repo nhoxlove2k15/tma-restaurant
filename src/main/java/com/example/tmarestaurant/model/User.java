@@ -17,7 +17,15 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private Long id;
     @Column(name = "fullname",nullable = false)
     private String fullname;
@@ -118,7 +126,6 @@ public class User {
     public void setBills(List<Bill> bills) {
         this.bills = bills;
     }
-
 
     public List<Comment> getComments() {
         return comments;

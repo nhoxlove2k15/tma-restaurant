@@ -9,12 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
 public class MenuController {
     private final MenuService menuService;
+    private MenuResponseDto menuResponseDto;
+    private RestaurantResponse response;
 
 
     @Autowired
@@ -22,33 +25,65 @@ public class MenuController {
         this.menuService = menuService;
     }
     @PostMapping("/addMenu")
-    public ResponseEntity<MenuResponseDto> addMenu(@RequestBody final MenuRequestDto menuRequestDto) {
-        MenuResponseDto menuResponseDto = menuService.addMenu(menuRequestDto);
-        return new ResponseEntity<>(menuResponseDto, HttpStatus.OK);
+    public RestaurantResponse<MenuResponseDto> addMenu(@RequestBody final MenuRequestDto menuRequestDto) {
+        try {
+            menuResponseDto = menuService.addMenu(menuRequestDto);
+
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+
+        response = new RestaurantResponse(menuResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        return response;
     }
     @GetMapping("get/{id}")
     public RestaurantResponse<MenuResponseDto> getMenu(@PathVariable final Long id) {
-        MenuResponseDto menuResponseDto = menuService.getMenuById(id);
-        RestaurantResponse response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        try {
+            menuResponseDto = menuService.getMenuById(id);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+
+        response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
         return response;
     }
     @GetMapping("/getAll")
     public RestaurantResponse<List<MenuResponseDto>> getMenus() {
-        List<MenuResponseDto> menuResponseDtos = menuService.getMenus();
-        RestaurantResponse response = new RestaurantResponse(menuResponseDtos,"Add successfully", HttpStatus.OK);
+        List<MenuResponseDto> menuResponseDtos = new ArrayList<>();
+        try {
+             menuResponseDtos  = menuService.getMenus();
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+
+        response = new RestaurantResponse(menuResponseDtos,"Add successfully", HttpStatus.OK);
         return response;
     }
     @DeleteMapping("/delete/{id}")
     public RestaurantResponse<MenuResponseDto> deleteMenu(@PathVariable final Long id) {
-        MenuResponseDto menuResponseDto = menuService.deleteMenu(id);
-        RestaurantResponse response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        try {
+            menuService.deleteMenu(id);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+
+        response = new RestaurantResponse(null,"Add successfully", HttpStatus.OK);
         return response;
     }
     @PostMapping("/edit/{id}")
     public RestaurantResponse<MenuResponseDto> editMenu(@PathVariable final Long id,
                                                         @RequestBody final MenuRequestDto MenuRequestDto) {
-        MenuResponseDto menuResponseDto = menuService.editMenu(id,MenuRequestDto);
-        RestaurantResponse response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        try {
+            menuService.editMenu(id,MenuRequestDto);
+        } catch (Exception e) {
+            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            return response;
+        }
+        response = new RestaurantResponse(id,"Add successfully", HttpStatus.OK);
         return response;
     }
 }
