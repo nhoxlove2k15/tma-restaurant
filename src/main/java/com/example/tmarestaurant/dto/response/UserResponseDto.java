@@ -1,6 +1,7 @@
 package com.example.tmarestaurant.dto.response;
 
 import com.example.tmarestaurant.model.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ public class UserResponseDto {
         private UserRole role;
 
         private List<Bill> bills = new ArrayList<>();
-        private Set<Like> likes = new HashSet<>();
-        private Set<Rating> ratings = new HashSet<>();
-        private Set<Comment> comments = new HashSet<>();
+        private List<Like> likes = new ArrayList<>();
+        private List<Rating> ratings = new ArrayList<>();
+        private List<Comment> comments = new ArrayList<>();
     }
 
 

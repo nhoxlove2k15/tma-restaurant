@@ -1,5 +1,6 @@
 package com.example.tmarestaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
@@ -18,6 +19,7 @@ public class Like {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JoinColumn(name = "user_id")
     User user ;
 

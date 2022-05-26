@@ -32,6 +32,20 @@ public class User {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "role")
     private UserRole role = UserRole.CUSTOMER;
+        @OneToMany( mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Bill> bills = new ArrayList<>();
+    @JsonIgnore
+//    @OneToMany
+//    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    List<Like> likes = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<Rating> ratings = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -89,28 +103,38 @@ public class User {
         this.role = role;
     }
 
-    public Set<Like> getLikes() {
+    public List<Like> getLikes() {
         return likes;
     }
 
-    public void setLikes(Set<Like> likes) {
+    public void setLikes(List<Like> likes) {
         this.likes = likes;
     }
 
-    //    @OneToMany( mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<Bill> bills = new ArrayList<>();
-    @JsonIgnore
-//    @OneToMany
-//    @JoinColumn(name = "user_id")
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    @Fetch(FetchMode.JOIN)
-      Set<Like> likes = new HashSet<>();
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    private Set<Rating> ratings = new HashSet<>();
-//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-//    private Set<Comment> comments = new HashSet<>();
+    public List<Bill> getBills() {
+        return bills;
+    }
+
+    public void setBills(List<Bill> bills) {
+        this.bills = bills;
+    }
 
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
 
     public User(String fullname, String username, String password, String phone, UserRole role) {
         this.fullname = fullname;

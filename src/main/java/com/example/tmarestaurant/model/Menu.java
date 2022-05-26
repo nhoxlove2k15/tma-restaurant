@@ -42,11 +42,19 @@ public class Menu {
     private int likedCount;
     @JsonIgnore
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
-//    @Fetch(FetchMode.JOIN)
      Set<Like> likes = new HashSet<>();
+    @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
+    private Set<Rating> ratings = new HashSet<>();
+    @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
+    private Set<Comment> comments = new HashSet<>();
     @ManyToOne(fetch = FetchType.EAGER)
 //    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "category_id")
+
+
+
+//    @Column(name = "category_id")
+//    private Long categoryId;
 
     private Category category = new Category();
 
@@ -130,13 +138,7 @@ public class Menu {
         this.category = category;
     }
 
-    //    @OneToMany(mappedBy = "menu",fetch = FetchType.EAGER)
-//    private Set<Rating> ratings = new HashSet<>();
-//    @OneToMany(mappedBy = "menu",fetch = FetchType.EAGER)
-//    private Set<Comment> comments = new HashSet<>();
 
-//    @Column(name = "category_id")
-//    private Long categoryId;
 
 
 

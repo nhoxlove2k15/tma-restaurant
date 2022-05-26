@@ -10,6 +10,8 @@ public class LikeResponseDto {
 //    private Long userId;
 //    @JsonAlias(value = "menu")
 //    private Long menuId;
+    // We can see like from User and Menu have "likedCount" field, so it response 1 entity
+
     @JsonAlias(value = "menu")
     private Menu menu;
 }

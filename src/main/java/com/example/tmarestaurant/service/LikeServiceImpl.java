@@ -39,20 +39,20 @@ public class LikeServiceImpl implements LikeService {
     public LikeResponseDto addLike(LikeRequestDto likeRequestDto) {
         Long userId = likeRequestDto.getUserId();
         Long menuId = likeRequestDto.getMenuId();
-        User user = userService.getUser(userId);
-        Menu menu = menuService.getMenu(menuId);
+//        User user = userService.getUser(userId);
+//        Menu menu = menuService.getMenu(menuId);
         Like like = new Like();
 
-        if (user != null && menu != null) {
+
             like.getMenu().setId(menuId);
             like.getUser().setId(userId);
             likeRepository.save(like);
-        }
+
         return mapper.likeToLikeResponseDto(like);
     }
 
     @Override
-    public List<LikeResponseDto> getLikes(Long userId) {
+    public List<Like> getLikes(Long userId) {
 
         List<Like> results = new ArrayList<>();
 //        List<Like>  likes = StreamSupport
@@ -79,6 +79,7 @@ public class LikeServiceImpl implements LikeService {
 
         for(Like like : likes) {
             if (like.getUser().getId() == userId) {
+                like.setUser(null);
                 results.add(like);
             }
         }
@@ -94,20 +95,19 @@ public class LikeServiceImpl implements LikeService {
 //
 //        results.add(like);
 //        System.out.println("=============================================== like service : " + results.get(0).getMenu().toString() );
-        return mapper.likeResponseDtos(results);
+        return results;
     }
 
     @Override
     public LikeResponseDto deleteLike(LikeRequestDto likeRequestDto) {
         Long userId = likeRequestDto.getUserId();
         Long menuId = likeRequestDto.getMenuId();
-        User user = userService.getUser(userId);
-        Menu menu = menuService.getMenu(menuId);
-        Like like = new Like();
-        if (user != null && menu != null) {
-            likeRepository.deleteLikesByIds(userId,menuId);
 
-        }
+        Like like = new Like();
+
+        likeRepository.deleteLikesByIds(userId,menuId);
+
+
         return mapper.likeToLikeResponseDto(like);
     }
 

@@ -1,10 +1,8 @@
 package com.example.tmarestaurant.dto;
 
 import com.example.tmarestaurant.dto.request.BillDetailRequestDto;
-import com.example.tmarestaurant.dto.response.BillResponseDto;
-import com.example.tmarestaurant.dto.response.LikeResponseDto;
-import com.example.tmarestaurant.dto.response.MenuResponseDto;
-import com.example.tmarestaurant.dto.response.UserResponseDto;
+import com.example.tmarestaurant.dto.request.RatingRequestDto;
+import com.example.tmarestaurant.dto.response.*;
 import com.example.tmarestaurant.model.*;
 
 import java.util.ArrayList;
@@ -18,8 +16,9 @@ public class mapper {
         userResponseDto.setFullname(user.getFullname());
         userResponseDto.setUsername(user.getUsername());
 //        userResponseDto.setBills(user.getBills());
-//        userResponseDto.setComments(user.getComments());
-//        userResponseDto.setRatings(user.getRatings());
+        userResponseDto.setComments(user.getComments());
+        userResponseDto.setRatings(user.getRatings());
+        userResponseDto.setLikes(user.getLikes());
 
         userResponseDto.setRole(user.getRole());
         userResponseDto.setPhone(user.getPhone());
@@ -102,5 +101,38 @@ public class mapper {
         }
         System.out.println("===============================================" + "likes menus ");
         return likeResponseDtos;
+    }
+
+    public static RatingResponseDto ratingToRatingResponseDto(Rating rating) {
+        RatingResponseDto ratingResponseDto = new RatingResponseDto();
+        ratingResponseDto.setUser(rating.getUser());
+        ratingResponseDto.setMenu(rating.getMenu());
+        return ratingResponseDto;
+    }
+
+    public static List<RatingResponseDto> ratingToRatingResponseDtos(List<Rating> ratings) {
+        List<RatingResponseDto> ratingResponseDtos = new ArrayList<>();
+        for(Rating rating : ratings) {
+            ratingResponseDtos.add(ratingToRatingResponseDto(rating));
+        }
+        return ratingResponseDtos;
+    }
+
+    public static CommentResponseDto commentToCommentResponseDto(Comment comment) {
+        CommentResponseDto commentResponseDto = new CommentResponseDto();
+        commentResponseDto.setContent(comment.getContent());
+        commentResponseDto.setToxic(comment.isToxic());
+        commentResponseDto.setPoint(comment.getPoint());
+        commentResponseDto.setMenu(comment.getMenu());
+        commentResponseDto.setUser(comment.getUser());
+        return commentResponseDto;
+    }
+
+    public static List<CommentResponseDto> commentToCommentResponseDtos(List<Comment> comments) {
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+        for(Comment comment : comments) {
+            commentResponseDtos.add(commentToCommentResponseDto(comment));
+        }
+        return commentResponseDtos;
     }
 }

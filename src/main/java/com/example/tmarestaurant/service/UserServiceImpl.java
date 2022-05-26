@@ -3,6 +3,7 @@ package com.example.tmarestaurant.service;
 import com.example.tmarestaurant.dto.mapper;
 import com.example.tmarestaurant.dto.request.UserRegisterDto;
 import com.example.tmarestaurant.dto.response.UserResponseDto;
+import com.example.tmarestaurant.model.Rating;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,15 @@ import java.util.stream.StreamSupport;
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
     private LikeService likeService;
+    private RatingService ratingService;
+    private CommentService commentService;
 
     @Autowired
-    public UserServiceImpl(@Lazy UserRepository userRepository, @Lazy LikeService likeService) {
+    public UserServiceImpl(@Lazy UserRepository userRepository, @Lazy LikeService likeService, @Lazy RatingService ratingService, @Lazy CommentService commentService) {
         this.userRepository = userRepository;
         this.likeService = likeService;
+        this.ratingService = ratingService;
+        this.commentService = commentService;
     }
 
     @Override
@@ -57,6 +62,11 @@ public class UserServiceImpl implements UserService{
                         () -> new IllegalArgumentException("user with id: " + userId + " could ot be found")
                 );
 //        user.setM
+        user.setRatings(ratingService.getRatingsByUser(user.getId()));
+        user.setLikes(likeService.getLikes(user.getId()));
+        user.setComments(commentService.getCommentsByUser(user.getId()));
+        System.out.println("--------------------------------------------- user service " + user.getRatings());
+
         return user;
     }
 

@@ -29,7 +29,7 @@ public class LikeController {
 
     @GetMapping("/getAll/{id}")
     public RestaurantResponse<List<LikeResponseDto>> getLikes(@PathVariable final Long id) {
-        List<LikeResponseDto> likeResponseDtos = likeService.getLikes(id);
+        List<LikeResponseDto> likeResponseDtos = null;
         RestaurantResponse response = new RestaurantResponse(likeResponseDtos,"Get list successfully", HttpStatus.OK);
         return response;
     }
