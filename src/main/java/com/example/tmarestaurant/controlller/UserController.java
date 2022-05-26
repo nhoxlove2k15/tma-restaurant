@@ -48,6 +48,7 @@ public class UserController {
     public RestaurantResponse editUser(@PathVariable final Long id,
                                        @RequestBody final UserRegisterDto userRequestDto) {
 
+        UserResponseDto userResponseDto = userService.editUser(id,userRequestDto);
         RestaurantResponse response = new RestaurantResponse(null,"update sucessfully", HttpStatus.OK);
 
         return response;

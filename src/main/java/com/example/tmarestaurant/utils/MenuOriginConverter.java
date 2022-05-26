@@ -6,8 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.AttributeConverter;
 import java.util.List;
+import java.util.Set;
 
-public class MenuOriginConverter implements AttributeConverter<List<MenuOrigin>,String> {
+public class MenuOriginConverter implements AttributeConverter<Set<MenuOrigin>,String> {
     private  static ObjectMapper mapper;
     static {
         mapper = new ObjectMapper();
@@ -15,7 +16,7 @@ public class MenuOriginConverter implements AttributeConverter<List<MenuOrigin>,
 
 
     @Override
-    public String convertToDatabaseColumn(List<MenuOrigin> attribute) {
+    public String convertToDatabaseColumn(Set<MenuOrigin> attribute) {
         try {
             return mapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
@@ -25,9 +26,9 @@ public class MenuOriginConverter implements AttributeConverter<List<MenuOrigin>,
     }
 
     @Override
-    public List<MenuOrigin> convertToEntityAttribute(String dbData) {
+    public Set<MenuOrigin> convertToEntityAttribute(String dbData) {
         try {
-            return mapper.readValue(dbData, new TypeReference<List<MenuOrigin>>() {});
+            return mapper.readValue(dbData, new TypeReference<Set<MenuOrigin>>() {});
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
