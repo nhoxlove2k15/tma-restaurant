@@ -37,7 +37,7 @@ public class BillServiceImpl implements BillService{
 
 
         BillDetail billDetail = mapper.billDetailRequestToBillDetail(billRequestDto.getBillDetails());
-        System.out.println("============================================ bill serivce" + billDetail.getMenuOrigin());
+//        System.out.println("============================================ bill serivce" + billDetail.getMenuOrigin());
 
         Bill bill = new Bill();
 //        bill.setId(2L);
@@ -45,12 +45,8 @@ public class BillServiceImpl implements BillService{
         bill.setTotalprice(billRequestDto.getTotalPrice());
         bill.getUser().setId(billRequestDto.getUserId());
         bill.getBillDetails().setId(billDetail.getId());
-        double sum = 0 ;
-        for (MenuOrigin menuOrigin : billDetail.getMenuOrigin()) {
-            sum += menuOrigin.getQuantity() * menuOrigin.getPrice();
-        }
-        bill.setTotalprice(sum - sum*billDetail.getDiscount() );
-        System.out.println("============================================ bill serivce" + bill.getBillDetails().getId() );
+        bill.setTotalprice(caculateTotalPrice(billDetail));
+//        System.out.println("============================================ bill serivce" + bill.getBillDetails().getId() );
 
         try {
             billRepository.save(bill);
@@ -105,6 +101,16 @@ public class BillServiceImpl implements BillService{
                 .stream(billRepository.findAll().spliterator(),false)
                 .collect(Collectors.toList());
         return mapper.billsToResponseDtos(bills);
+    }
+
+    @Override
+    public double caculateTotalPrice(BillDetail billDetail) {
+        double sum = 0 ;
+        for (MenuOrigin menuOrigin : billDetail.getMenuOrigin()) {
+            sum += menuOrigin.getQuantity() * menuOrigin.getPrice();
+        }
+        sum = sum - sum * billDetail.getDiscount();
+        return  sum;
     }
 
 //    @Override

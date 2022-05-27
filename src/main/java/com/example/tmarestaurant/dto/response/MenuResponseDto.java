@@ -7,7 +7,9 @@ import com.example.tmarestaurant.model.Rating;
 import lombok.Data;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,11 +24,11 @@ public class MenuResponseDto {
     private String images;
     private double point;
     private int likedCount;
-    private Set<Like> likes = new HashSet<>();
+    private List<Like> likes = new ArrayList<>();
 
-    private Set<Rating> ratings = new HashSet<>();
+    private List<Rating> ratings = new ArrayList<>();
 
-    private Set<Comment> comments = new HashSet<>();
+    private List<Comment> comments = new ArrayList<>();
 
     private Category category;
 }

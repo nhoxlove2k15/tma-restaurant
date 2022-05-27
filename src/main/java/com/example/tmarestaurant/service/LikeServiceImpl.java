@@ -111,6 +111,14 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    public List<LikeResponseDto> getLikes() {
+        List<Like> likes = StreamSupport
+                .stream(likeRepository.findAll().spliterator(),false)
+                .collect(Collectors.toList());
+        return mapper.likeResponseDtos(likes);
+    }
+
+    @Override
     public void deleteLike(LikeRequestDto likeRequestDto) {
         Long userId = likeRequestDto.getUserId();
         Long menuId = likeRequestDto.getMenuId();

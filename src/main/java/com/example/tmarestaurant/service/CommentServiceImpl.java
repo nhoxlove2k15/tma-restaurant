@@ -96,12 +96,21 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
         List<Comment> results = new ArrayList<>();
         for(Comment comment : comments) {
-            if(comment.getUser().getId() == menuId) {
+            if(comment.getMenu().getId() == menuId) {
                 comment.setMenu(null);
                 results.add(comment);
             }
         }
         return results;
+    }
+
+    @Override
+    public List<CommentResponseDto> getComments() {
+        List<Comment> comments = StreamSupport
+                .stream(commentRepository.findAll().spliterator(),false)
+                .collect(Collectors.toList());
+
+        return mapper.commentToCommentResponseDtos(comments);
     }
 
 //    @Override
@@ -113,9 +122,9 @@ public class CommentServiceImpl implements CommentService {
 //    }
 
     @Override
-    public void deleteComment(CommentRequestDto commentRequestDto) {
+    public void deleteComment(Long commentId) {
         try {
-            commentRepository.deleteById(commentRequestDto.getId());
+            commentRepository.deleteById(commentId);
         } catch (Exception e) {
             throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
         }

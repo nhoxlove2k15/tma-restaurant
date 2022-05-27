@@ -31,7 +31,7 @@ public class Rating {
     @JoinColumn(name = "user_id")
 
     private User user;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "menu_id")
     private Menu menu;

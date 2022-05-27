@@ -11,6 +11,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,9 +41,9 @@ public class Menu {
     @Column(name = "images")
     private String images;
     // ["url1","url2","url3"]
-    @Convert(converter = MenuOriginConverter.class)
-    @Column(name = "imagesjson")
-    private Set<MenuOrigin> imagesjson;
+//    @Convert(converter = MenuOriginConverter.class)
+//    @Column(name = "imagesjson")
+//    private Set<MenuOrigin> imagesjson;
 
     @Column(name = "point")
     private double point;
@@ -50,11 +51,11 @@ public class Menu {
     private int likedCount;
     @JsonIgnore
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
-     Set<Like> likes = new HashSet<>();
+     List<Like> likes = new ArrayList<>();
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
-    private Set<Rating> ratings = new HashSet<>();
+    private List<Rating> ratings = new ArrayList<>();
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
-    private Set<Comment> comments = new HashSet<>();
+    private List<Comment> comments = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER)
 //    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "category_id")
@@ -66,6 +67,8 @@ public class Menu {
 //    private Long categoryId;
 
     private Category category = new Category();
+
+
 
 
 
@@ -109,13 +112,13 @@ public class Menu {
         this.images = images;
     }
 
-    public Set<MenuOrigin> getImagesjson() {
-        return imagesjson;
-    }
-
-    public void setImagesjson(Set<MenuOrigin> imagesjson) {
-        this.imagesjson = imagesjson;
-    }
+//    public Set<MenuOrigin> getImagesjson() {
+//        return imagesjson;
+//    }
+//
+//    public void setImagesjson(Set<MenuOrigin> imagesjson) {
+//        this.imagesjson = imagesjson;
+//    }
 
     public double getPoint() {
         return point;
@@ -133,13 +136,6 @@ public class Menu {
         this.likedCount = likedCount;
     }
 
-    public Set<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Set<Like> likes) {
-        this.likes = likes;
-    }
 
     public Category getCategory() {
         return category;
@@ -160,6 +156,31 @@ public class Menu {
 //        this.images = images;
 //    }
 
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public Menu(String name, String description, double price, String images, Long categoryId) {
         this.name = name;
         this.description = description;
@@ -178,14 +199,14 @@ public class Menu {
 //        this.categoryId = categoryId;
 //    }
 
-    public Menu(String name, String description, double price, String images, Set<MenuOrigin> imagesjson, Long categoryId) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.images = images;
-        this.imagesjson = imagesjson;
-        this.getCategory().setId(categoryId);
-
-//        this.categoryId = categoryId;
-    }
+//    public Menu(String name, String description, double price, String images, Set<MenuOrigin> imagesjson, Long categoryId) {
+//        this.name = name;
+//        this.description = description;
+//        this.price = price;
+//        this.images = images;
+//        this.imagesjson = imagesjson;
+//        this.getCategory().setId(categoryId);
+//
+////        this.categoryId = categoryId;
+//    }
 }

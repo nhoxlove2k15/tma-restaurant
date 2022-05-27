@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -45,6 +45,9 @@ public class Bill {
     @Column(name = "totalprice")
     private double totalprice;
 
+    @Column(name = "ordered_time", columnDefinition = "TIMESTAMP")
+    private LocalDateTime orderedTime = LocalDateTime.now();
+
     public Bill() {
         this.user = new User();
     }
@@ -58,6 +61,14 @@ public class Bill {
     public Bill(Long userId,  Long billDetailsId) {
         this.getUser().setId(userId);
         this.getBillDetails().setId(billDetailsId);
+    }
+
+    public LocalDateTime getOrderedTime() {
+        return orderedTime;
+    }
+
+    public void setOrderedTime(LocalDateTime orderedTime) {
+        this.orderedTime = orderedTime;
     }
 
     public Long getId() {

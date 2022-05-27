@@ -3,6 +3,7 @@ package com.example.tmarestaurant.service;
 import com.example.tmarestaurant.dto.request.BillRequestDto;
 import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.model.Bill;
+import com.example.tmarestaurant.model.BillDetail;
 
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ public interface BillService {
     Bill getBill(Long billId);
     List<Bill> getBillsByUser(Long userId);
     List<BillResponseDto> getBills();
-
+    double caculateTotalPrice(BillDetail billDetail);
     void deleteBill(Long billId);
     void editBill(Long billId, BillRequestDto billRequestDto);
 

@@ -12,6 +12,11 @@ public class MyConstant {
     public static final String BILL_DETAILS_ENTITY = "Bill_Details";
     public static final String USER_ENTITY = "User";
 
+    public static final String ACTION_GET = "Get";
+    public static final String ACTION_UPDATE = "Update";
+    public static final String ACTION_DELETE = "Delete";
+    public static final String ACTION_CREATE = "Create";
+
 //    public static final String ERR_COMMENT_WRONG_DTABLE = "Something wrong with table comment in database";
 //    public static final String ERR_COMMENT_GET_ENTITY ="Can't get Entity Comment";
 }

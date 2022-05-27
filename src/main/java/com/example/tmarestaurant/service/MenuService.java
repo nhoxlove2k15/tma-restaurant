@@ -16,6 +16,7 @@ public interface MenuService {
     List<MenuResponseDto> getMenus();
     void deleteMenu(Long menuId);
     void editMenu(Long menuId, MenuRequestDto menuRequestDto);
+    List<MenuResponseDto> searchMenuByNameAndDescription(String queryString);
 //    public BillResponseDto addAuthorToBill(Long BillId, Long authorId);
 //    public BillResponseDto deleteAuthorFromBill(Long BillId, Long authorId);
 //    public BillResponseDto addCategoryToBill(Long BillId, Long categoryId);

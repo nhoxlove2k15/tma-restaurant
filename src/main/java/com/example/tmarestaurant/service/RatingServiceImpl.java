@@ -92,12 +92,20 @@ public class RatingServiceImpl implements RatingService {
                 .collect(Collectors.toList());
         List<Rating> results = new ArrayList<>();
         for (Rating rating : ratings) {
-            if (rating.getUser().getId() == menuId) {
+            if (rating.getMenu().getId() == menuId) {
                 rating.setMenu(null);
                 results.add(rating);
             }
         }
         return results;
+    }
+
+    @Override
+    public List<RatingResponseDto> getRatings() {
+        List<Rating> ratings = StreamSupport
+                .stream(ratingRepository.findAll().spliterator(),false)
+                .collect(Collectors.toList());
+        return mapper.ratingToRatingResponseDtos(ratings);
     }
 
     @Override

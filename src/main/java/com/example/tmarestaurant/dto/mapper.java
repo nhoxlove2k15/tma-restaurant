@@ -39,8 +39,8 @@ public class mapper {
         menuResponseDto.setDescription(menu.getDescription());
         menuResponseDto.setImages(menu.getImages());
         menuResponseDto.setName(menu.getName());
-//        menuResponseDto.setComments(menu.getComments());
-//        menuResponseDto.setRatings(menu.getRatings());
+        menuResponseDto.setComments(menu.getComments());
+        menuResponseDto.setRatings(menu.getRatings());
 
 //        menuResponseDto.setLikes(menu.getLikes());
         menuResponseDto.setPrice(menu.getPrice());

@@ -5,6 +5,7 @@ import com.example.tmarestaurant.dto.request.RatingRequestDto;
 import com.example.tmarestaurant.dto.response.CommentResponseDto;
 import com.example.tmarestaurant.dto.response.RatingResponseDto;
 import com.example.tmarestaurant.service.CommentService;
+import com.example.tmarestaurant.utils.MyConstant;
 import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,11 @@ public class CommentController {
         try {
             commentResponseDto = commentService.addComment(commentRequestDto);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST, e.getMessage());
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(commentResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_CREATE , MyConstant.COMMENT_ENTITY, commentResponseDto.getId());
+
         return response;
     }
     @GetMapping("get/{id}")
@@ -43,34 +45,38 @@ public class CommentController {
         try {
             commentResponseDto = commentService.getCommentById(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Get failed", HttpStatus.BAD_REQUEST, e.getMessage());
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
 
-        response = new RestaurantResponse(commentResponseDto,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.COMMENT_ENTITY, commentResponseDto);
+
+
         return response;
     }
     @GetMapping("/getAll")
     public RestaurantResponse<List<CommentResponseDto>> getComments() {
-        List<CommentResponseDto> commentResponseDtos = null;
-        RestaurantResponse response = new RestaurantResponse(commentResponseDtos,"Add successfully", HttpStatus.OK);
+        List<CommentResponseDto> commentResponseDtos = commentService.getComments();
+        RestaurantResponse response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.COMMENT_ENTITY, commentResponseDtos);
         return response;
     }
     @DeleteMapping("/delete/{id}")
-    public RestaurantResponse<CommentResponseDto> deleteComment(@RequestBody final CommentRequestDto commentRequestDto) {
+    public RestaurantResponse<CommentResponseDto> deleteComment(@PathVariable final Long id) {
 
         RestaurantResponse response ;
         try {
-            commentService.deleteComment(commentRequestDto);
-        } catch (Exception exception) {
-            response = new RestaurantResponse(null,"Failed", HttpStatus.BAD_REQUEST);
+            commentService.deleteComment(id);
+        } catch (Exception e) {
+            response = new RestaurantResponse(false,e.getMessage(), null);
+
             return response;
         }
 
-         response = new RestaurantResponse(null,"Delete successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_DELETE , MyConstant.COMMENT_ENTITY, null);
         return response;
     }
-    @PostMapping("/edit/{id}")
+
+    @PatchMapping("/edit/{id}")
     public RestaurantResponse<CommentResponseDto> editComment(@PathVariable final Long id,
                                                             @RequestBody final CommentRequestDto commentRequestDto) {
         RestaurantResponse response ;
@@ -78,11 +84,11 @@ public class CommentController {
             commentService.editComment(id,commentRequestDto);
 
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Update failed", HttpStatus.BAD_REQUEST, e.getMessage());
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
 
-        response = new RestaurantResponse(id,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_UPDATE , MyConstant.COMMENT_ENTITY, id);
         return response;
     }
 }

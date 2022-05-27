@@ -8,6 +8,7 @@ import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.MenuRepository;
 import com.example.tmarestaurant.utils.MyConstant;
+import lombok.var;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -15,7 +16,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 @Service
@@ -24,12 +28,16 @@ public class MenuServiceImpl implements MenuService{
     private  final MenuRepository menuRepository;
 //    @Autowired @Lazy
     private  final LikeService likeService;
+    private final RatingService ratingService;
+    private final CommentService commentService;
 
 
     @Autowired
-    public MenuServiceImpl(@NonNull MenuRepository menuRepository, @NonNull @Lazy LikeService likeService) {
+    public MenuServiceImpl( MenuRepository menuRepository,@Lazy LikeService likeService, @Lazy RatingService ratingService , @Lazy CommentService commentService) {
         this.menuRepository = menuRepository;
         this.likeService = likeService;
+        this.ratingService = ratingService;
+        this.commentService = commentService;
     }
 
 //    public LikeService getLikeService() {
@@ -63,6 +71,7 @@ public class MenuServiceImpl implements MenuService{
         menu.setDescription(menuRequestDto.getDescription());
         menu.setPrice(menuRequestDto.getPrice());
         menu.setName(menuRequestDto.getName());
+        menu.setRatings(ratingService.getRatingsByMenu(menu.getId()));
         // need category repository
 //        menu.setCategory(menuRequs);
         menu.getCategory().setId((long) menuRequestDto.getCategoryId());
@@ -92,12 +101,14 @@ public class MenuServiceImpl implements MenuService{
 //
 //        System.out.println("========================================================================================" + 2);
         menu.setLikedCount(likeService.getLikedCount(menu.getId()));
-        try {
-            menuRepository.save(menu);
-        } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
-
-        }
+        menu.setRatings(ratingService.getRatingsByMenu(menu.getId()));
+        menu.setComments(commentService.getCommentsByMenu(menu.getId()));
+//        try {
+//            menuRepository.save(menu);
+//        } catch (Exception e) {
+//            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+//
+//        }
 
         return menu;
     }
@@ -136,5 +147,21 @@ public class MenuServiceImpl implements MenuService{
             throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
         }
 
+    }
+
+    @Override
+    public List<MenuResponseDto> searchMenuByNameAndDescription(String queryString) {
+//        Map<Long,Long> map = new HashMap();
+
+//        if (menu != null) {
+        List<Menu> results;
+        try {
+             results = menuRepository.getMenuByName(queryString);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+
+        }
+
+        return mapper.menusToMenuResponseDtos(results);
     }
 }

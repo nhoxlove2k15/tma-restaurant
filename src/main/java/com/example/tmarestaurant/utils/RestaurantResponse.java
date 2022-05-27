@@ -7,22 +7,31 @@ import org.springframework.http.HttpStatus;
 
 @Data
 public class RestaurantResponse<T> {
-    private T data;
+
+    private Boolean status;
     private String message;
-    private HttpStatus status;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String rootError;
+    private T data;
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private String rootError;
 
-    public RestaurantResponse(T data, String message, HttpStatus status) {
-        this.data = data;
-        this.message = message;
+
+    public RestaurantResponse(Boolean status, String action, String entity, T data) {
         this.status = status;
+        this.message = action + " " + entity;
+        this.data = data;
     }
 
-    public RestaurantResponse(T data, String message, HttpStatus status, String rootError) {
-        this.data = data;
-        this.message = message;
+    public RestaurantResponse(Boolean status, String message, T data) {
         this.status = status;
-        this.rootError = rootError;
+        this.message = message;
+        this.data = data;
     }
+
+
+    //    public RestaurantResponse(T data, String message, HttpStatus status, String rootError) {
+//        this.data = data;
+//        this.message = message;
+//        this.status = status;
+//        this.rootError = rootError;
+//    }
 }

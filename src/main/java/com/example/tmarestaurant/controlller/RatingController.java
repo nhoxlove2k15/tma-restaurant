@@ -4,6 +4,7 @@ import com.example.tmarestaurant.dto.request.RatingRequestDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.dto.response.RatingResponseDto;
 import com.example.tmarestaurant.service.RatingService;
+import com.example.tmarestaurant.utils.MyConstant;
 import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,10 +30,10 @@ public class RatingController {
         try {
             ratingResponseDto = ratingService.addRating(ratingRequestDto);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"add Failed", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(ratingResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_CREATE, MyConstant.RATING_ENTITY, ratingResponseDto.getId());
         return response;
     }
     @GetMapping("get/{id}")
@@ -40,16 +41,17 @@ public class RatingController {
         try {
             ratingResponseDto = ratingService.getRatingById(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
+
             return response;
         }
-        response = new RestaurantResponse(ratingResponseDto,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.RATING_ENTITY, ratingResponseDto);
         return response;
     }
     @GetMapping("/getAll")
     public RestaurantResponse<List<RatingResponseDto>> getRatings() {
-        List<RatingResponseDto> ratingResponseDtos = null;
-        RestaurantResponse response = new RestaurantResponse(ratingResponseDtos,"Add successfully", HttpStatus.OK);
+        List<RatingResponseDto> ratingResponseDtos = ratingService.getRatings();
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.RATING_ENTITY, ratingResponseDtos);
         return response;
     }
     @DeleteMapping("/delete/{id}")
@@ -57,10 +59,11 @@ public class RatingController {
         try {
             ratingService.deleteRating(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
+
         }
 
-        response = new RestaurantResponse(null,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_DELETE, MyConstant.RATING_ENTITY, null);
         return response;
     }
     @PostMapping("/edit/{id}")
@@ -69,10 +72,10 @@ public class RatingController {
         try {
             ratingService.editRating(id,RatingRequestDto);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(id,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_DELETE, MyConstant.RATING_ENTITY, id);
         return response;
     }
 }

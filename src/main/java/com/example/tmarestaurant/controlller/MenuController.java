@@ -2,7 +2,9 @@ package com.example.tmarestaurant.controlller;
 
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
+import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.service.MenuService;
+import com.example.tmarestaurant.utils.MyConstant;
 import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,11 +32,11 @@ public class MenuController {
             menuResponseDto = menuService.addMenu(menuRequestDto);
 
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
 
-        response = new RestaurantResponse(menuResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true,MyConstant.ACTION_CREATE , MyConstant.MENU_ENTITY, menuResponseDto.getId());
         return response;
     }
     @GetMapping("get/{id}")
@@ -42,24 +44,38 @@ public class MenuController {
         try {
             menuResponseDto = menuService.getMenuById(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
 
-        response = new RestaurantResponse(menuResponseDto,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY, menuResponseDto);
         return response;
     }
+
     @GetMapping("/getAll")
     public RestaurantResponse<List<MenuResponseDto>> getMenus() {
         List<MenuResponseDto> menuResponseDtos = new ArrayList<>();
         try {
              menuResponseDtos  = menuService.getMenus();
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
 
-        response = new RestaurantResponse(menuResponseDtos,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY, menuResponseDtos);
+        return response;
+    }
+    @GetMapping("/search/{queryString}")
+    public RestaurantResponse<List<MenuResponseDto>> searchMenuByName(@PathVariable final String queryString){
+        List<MenuResponseDto> menuResponseDtos ;
+        try {
+            menuResponseDtos = menuService.searchMenuByNameAndDescription(queryString);
+
+        } catch (Exception e) {
+            response = new RestaurantResponse(false, e.getMessage(), null);
+            return response;
+        }
+        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY, menuResponseDtos);
         return response;
     }
     @DeleteMapping("/delete/{id}")
@@ -67,23 +83,24 @@ public class MenuController {
         try {
             menuService.deleteMenu(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
 
-        response = new RestaurantResponse(null,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true,MyConstant.ACTION_DELETE , MyConstant.MENU_ENTITY, null);
         return response;
     }
-    @PostMapping("/edit/{id}")
+    @PatchMapping("/edit/{id}")
     public RestaurantResponse<MenuResponseDto> editMenu(@PathVariable final Long id,
                                                         @RequestBody final MenuRequestDto MenuRequestDto) {
         try {
             menuService.editMenu(id,MenuRequestDto);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(id,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true,MyConstant.ACTION_UPDATE , MyConstant.MENU_ENTITY, id);
+
         return response;
     }
 }

@@ -96,19 +96,19 @@ public class MenuConfig {
                     2L
 
             );
-            Menu numberOne = new Menu(
-                    "numberOne",
-                    "yellow softdrink",
-                    25.0d,
-                    "url4",
-                    new HashSet<>(),
-                    4L
-
-            );
-            numberOne.getImagesjson().add(new MenuOrigin(numberOne.getName(),numberOne.getDescription(),numberOne.getPrice(),2));
-            numberOne.getImagesjson().add(new MenuOrigin(noodles.getName(),noodles.getDescription(),noodles.getPrice(),2));
+//            Menu numberOne = new Menu(
+//                    "numberOne",
+//                    "yellow softdrink",
+//                    25.0d,
+//                    "url4",
+//                    new ArrayList<>(),
+//                    4L
+//
+//            );
+//            numberOne.getImagesjson().add(new MenuOrigin(numberOne.getName(),numberOne.getDescription(),numberOne.getPrice(),2));
+//            numberOne.getImagesjson().add(new MenuOrigin(noodles.getName(),noodles.getDescription(),noodles.getPrice(),2));
 //            numberOne.getImagesjson().add("789");
-            menuRepository.saveAll(Arrays.asList(pizza,coca,whitskey,noodles,pepsi,egg,rice,hambuger,chicken,tiger,numberOne));
+            menuRepository.saveAll(Arrays.asList(pizza,coca,whitskey,noodles,pepsi,egg,rice,hambuger,chicken,tiger));
 //            menuRepository.save(pizza);
         };
     }

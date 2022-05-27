@@ -30,7 +30,7 @@ public class BillDetail {
     private Long id;
 //    private Bill bill;
     @Column(name = "discount")
-    private double discount ;
+    private double discount = 0 ;
     @Convert(converter = MenuOriginConverter.class)
     @Column(name = "menu_origin")
     private Set<MenuOrigin> menuOrigin = new HashSet<>();

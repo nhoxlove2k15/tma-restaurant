@@ -2,6 +2,7 @@ package com.example.tmarestaurant.service;
 
 import com.example.tmarestaurant.dto.request.CommentRequestDto;
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
+import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.dto.response.CommentResponseDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.model.Comment;
@@ -15,7 +16,8 @@ public interface CommentService {
     Comment getComment(Long commentId);
     List<Comment> getCommentsByUser(Long userId);
     List<Comment> getCommentsByMenu(Long menuId);
+    List<CommentResponseDto> getComments();
 
-    void deleteComment(CommentRequestDto commentRequestDto);
+    void deleteComment(Long commentId);
     void editComment(Long commentId, CommentRequestDto commentRequestDto);
 }

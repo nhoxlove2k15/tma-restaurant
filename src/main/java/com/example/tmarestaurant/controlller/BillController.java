@@ -4,6 +4,7 @@ import com.example.tmarestaurant.dto.request.BillRequestDto;
 
 import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.service.BillService;
+import com.example.tmarestaurant.utils.MyConstant;
 import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,10 @@ public class BillController {
         try {
             billResponseDto = billService.addBill(billRequestDto);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(),null);
             return response;
         }
-
-        response = new RestaurantResponse(billResponseDto.getId(),"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_CREATE , MyConstant.BILL_ENTITY, billRequestDto.getId());
         return response;
     }
     @GetMapping("get/{id}")
@@ -42,11 +42,11 @@ public class BillController {
         try {
             billResponseDto = billService.getBillById(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
 
         }
-        response = new RestaurantResponse(billResponseDto,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.BILL_ENTITY, billResponseDto);
         return response;
     }
     @GetMapping("/getAll")
@@ -56,10 +56,11 @@ public class BillController {
             billResponseDtos = billService.getBills();
 
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"Add successfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(billResponseDtos,"Add successfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.BILL_ENTITY, billResponseDtos);
+
         return response;
     }
     @DeleteMapping("/delete/{id}")
@@ -68,23 +69,22 @@ public class BillController {
         try {
             billService.deleteBill(id);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"delete failed", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-
-        response = new RestaurantResponse(null,"delete sucessfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_DELETE , MyConstant.BILL_ENTITY, null);
         return response;
     }
-    @PostMapping("/edit/{id}")
+    @PatchMapping("/edit/{id}")
     public RestaurantResponse editBill(@PathVariable final Long id,
                                        @RequestBody final BillRequestDto billRequestDto) {
         try {
             billService.editBill(id,billRequestDto);
         } catch (Exception e) {
-            response = new RestaurantResponse(null,"update sucessfully", HttpStatus.BAD_REQUEST);
+            response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(id,"update sucessfully", HttpStatus.OK);
+        response = new RestaurantResponse(true, MyConstant.ACTION_UPDATE , MyConstant.BILL_ENTITY, id);
         return response;
 
     }
