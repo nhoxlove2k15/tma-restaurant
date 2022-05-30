@@ -1,6 +1,9 @@
 package com.example.tmarestaurant.utils;
 
 public class MyConstant {
+    public static final String PATH_ML =  "http://localhost:8000";
+//public static final String PATH_ML =  "http://localhost:8000/bookgenres/one-book-predictions";
+
     public static final String ERR_WRONG_DATABASE = "Something wrong with database in table: ";
     public static final String ERR_GET_ENTITY = "Can't get Entity: ";
     public static final String ERR_ENTITY_EXISTED = "Entity is already Existed";

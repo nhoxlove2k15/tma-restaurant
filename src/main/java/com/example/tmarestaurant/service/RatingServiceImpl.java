@@ -75,7 +75,7 @@ public class RatingServiceImpl implements RatingService {
         List<Rating> results = new ArrayList<>();
         for (Rating rating : ratings) {
             if (rating.getUser().getId() == userId) {
-                rating.setUser(null);
+//                rating.setUser(null);
                 results.add(rating);
             }
         }
@@ -90,13 +90,17 @@ public class RatingServiceImpl implements RatingService {
         List<Rating> ratings = StreamSupport
                 .stream(ratingRepository.findAll().spliterator(),false)
                 .collect(Collectors.toList());
+
         List<Rating> results = new ArrayList<>();
         for (Rating rating : ratings) {
             if (rating.getMenu().getId() == menuId) {
-                rating.setMenu(null);
+//                rating.setMenu(null);
                 results.add(rating);
             }
         }
+//        for(Rating rating : ratings_copy) {
+//            rating.setMenu(null);
+//        }
         return results;
     }
 

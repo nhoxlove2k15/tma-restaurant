@@ -2,6 +2,7 @@ package com.example.tmarestaurant.service;
 
 import com.example.tmarestaurant.dto.request.BillRequestDto;
 import com.example.tmarestaurant.dto.response.BillResponseDto;
+import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.model.Bill;
 import com.example.tmarestaurant.model.BillDetail;
 
@@ -18,5 +19,7 @@ public interface BillService {
     double caculateTotalPrice(BillDetail billDetail);
     void deleteBill(Long billId);
     void editBill(Long billId, BillRequestDto billRequestDto);
+    List<BillResponseDto> sortBillByOrderedTime(String mode);
+
 
 }

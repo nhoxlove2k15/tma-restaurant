@@ -51,10 +51,12 @@ public class Menu {
     private int likedCount;
     @JsonIgnore
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
-     List<Like> likes = new ArrayList<>();
+    List<Like> likes = new ArrayList<>();
+    @JsonIgnore
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
     private List<Rating> ratings = new ArrayList<>();
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER)
 //    @Fetch(FetchMode.JOIN)

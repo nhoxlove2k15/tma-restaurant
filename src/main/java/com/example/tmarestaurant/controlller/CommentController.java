@@ -1,5 +1,6 @@
 package com.example.tmarestaurant.controlller;
 
+import com.example.tmarestaurant.client.Connection;
 import com.example.tmarestaurant.dto.request.CommentRequestDto;
 import com.example.tmarestaurant.dto.request.RatingRequestDto;
 import com.example.tmarestaurant.dto.response.CommentResponseDto;
@@ -28,8 +29,10 @@ public class CommentController {
     public RestaurantResponse<CommentResponseDto> addComment(@RequestBody final CommentRequestDto commentRequestDto) {
         CommentResponseDto commentResponseDto;
         RestaurantResponse response ;
+        Connection connection = new Connection();
+        connection.connectToMLServer();
         try {
-            commentResponseDto = commentService.addComment(commentRequestDto);
+            commentResponseDto = commentService.addComment(commentRequestDto,connection);
         } catch (Exception e) {
             response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
@@ -57,7 +60,7 @@ public class CommentController {
     @GetMapping("/getAll")
     public RestaurantResponse<List<CommentResponseDto>> getComments() {
         List<CommentResponseDto> commentResponseDtos = commentService.getComments();
-        RestaurantResponse response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.COMMENT_ENTITY, commentResponseDtos);
+        RestaurantResponse response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.COMMENT_ENTITY, commentResponseDtos.size(),commentResponseDtos);
         return response;
     }
     @DeleteMapping("/delete/{id}")

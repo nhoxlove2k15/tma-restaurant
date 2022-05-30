@@ -5,6 +5,7 @@ import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Menu;
+import com.example.tmarestaurant.model.Rating;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.MenuRepository;
 import com.example.tmarestaurant.utils.MyConstant;
@@ -12,6 +13,8 @@ import lombok.var;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +74,7 @@ public class MenuServiceImpl implements MenuService{
         menu.setDescription(menuRequestDto.getDescription());
         menu.setPrice(menuRequestDto.getPrice());
         menu.setName(menuRequestDto.getName());
-        menu.setRatings(ratingService.getRatingsByMenu(menu.getId()));
+//        menu.setRatings(ratingService.getRatingsByMenu(menu.getId()));
         // need category repository
 //        menu.setCategory(menuRequs);
         menu.getCategory().setId((long) menuRequestDto.getCategoryId());
@@ -86,8 +89,6 @@ public class MenuServiceImpl implements MenuService{
     @Override
     public MenuResponseDto getMenuById(Long menuId) {
         Menu menu = getMenu(menuId);
-//        int a = 2 ;
-
         return mapper.menuToMenuResponseDto(menu);
     }
 
@@ -97,22 +98,37 @@ public class MenuServiceImpl implements MenuService{
                 .orElseThrow(
                         () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.MENU_ENTITY)
                 );
-//        System.out.println("========================================================================================" + 1);
-//
-//        System.out.println("========================================================================================" + 2);
         menu.setLikedCount(likeService.getLikedCount(menu.getId()));
-        menu.setRatings(ratingService.getRatingsByMenu(menu.getId()));
-        menu.setComments(commentService.getCommentsByMenu(menu.getId()));
-//        try {
-//            menuRepository.save(menu);
-//        } catch (Exception e) {
-//            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
-//
-//        }
+        List<Rating> ratings = ratingService.getRatingsByMenu(menu.getId());
+        List<Comment> comments = commentService.getCommentsByMenu(menu.getId());
+        menu.setRatings(ratings);
+        menu.setComments(comments);
 
+        if(ratings.size() != 0 || comments.size() !=0 )
+            menu.setPoint(caculatedPoint(ratings,comments));
+
+        try {
+            menuRepository.save(menu);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+        }
         return menu;
     }
 
+    @Override
+    public int caculatedPoint(List<Rating> ratings, List<Comment> comments) {
+
+
+        int sum = 0 ;
+        for (Rating rating : ratings) {
+            sum += rating.getPoint();
+        }
+        for (Comment comment : comments) {
+            sum += comment.getPoint();
+        }
+        sum = sum / (comments.size() + ratings.size());
+        return sum;
+    }
     @Override
     public List<MenuResponseDto> getMenus() {
         List<Menu> menus = StreamSupport
@@ -164,4 +180,30 @@ public class MenuServiceImpl implements MenuService{
 
         return mapper.menusToMenuResponseDtos(results);
     }
+
+    @Override
+    public List<MenuResponseDto> sortMenuByField(String field, String mode) {
+        Sort.Direction modeSort ;
+        if (mode.equals("asc")) {
+            modeSort = Sort.Direction.ASC;
+        } else {
+            modeSort = Sort.Direction.DESC;
+        }
+        List<Menu> menus = StreamSupport
+                .stream(menuRepository.findAll(Sort.by(modeSort,field)).spliterator(), false)
+                .collect(Collectors.toList());
+        return mapper.menusToMenuResponseDtos(menus);
+    }
+
+    @Override
+    public List<MenuResponseDto> getMenus(int offset, int pageSize) {
+        List<Menu> menus = StreamSupport
+                .stream(menuRepository.findAll(PageRequest.of(offset,pageSize)).spliterator(), false)
+                .collect(Collectors.toList());
+        return mapper.menusToMenuResponseDtos(menus);
+    }
+
+
+
+
 }

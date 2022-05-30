@@ -1,5 +1,6 @@
 package com.example.tmarestaurant.service;
 
+import com.example.tmarestaurant.client.Connection;
 import com.example.tmarestaurant.dto.request.CommentRequestDto;
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.BillResponseDto;
@@ -11,7 +12,7 @@ import com.example.tmarestaurant.model.Menu;
 import java.util.List;
 
 public interface CommentService {
-    CommentResponseDto addComment(CommentRequestDto commentRequestDto);
+    CommentResponseDto addComment(CommentRequestDto commentRequestDto, Connection connection);
     CommentResponseDto getCommentById(Long commentId);
     Comment getComment(Long commentId);
     List<Comment> getCommentsByUser(Long userId);

@@ -59,7 +59,22 @@ public class BillController {
             response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.BILL_ENTITY, billResponseDtos);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.BILL_ENTITY, billResponseDtos.size() , billResponseDtos);
+
+        return response;
+    }
+    @GetMapping("/getAll/{mode}")
+    public RestaurantResponse<List<BillResponseDto>> sortBillsByOrderedTime(@PathVariable final String mode) {
+        List<BillResponseDto> billResponseDtos = new ArrayList<>();
+        System.out.println("============================================ bill controller:");
+        try {
+            billResponseDtos = billService.sortBillByOrderedTime(mode);
+
+        } catch (Exception e) {
+            response = new RestaurantResponse(false,e.getMessage(), null);
+            return response;
+        }
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.BILL_ENTITY, billResponseDtos.size() , billResponseDtos);
 
         return response;
     }

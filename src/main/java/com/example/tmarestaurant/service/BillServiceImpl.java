@@ -10,6 +10,7 @@ import com.example.tmarestaurant.repository.BillRepository;
 import com.example.tmarestaurant.utils.MenuOrigin;
 import com.example.tmarestaurant.utils.MyConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -142,5 +143,18 @@ public class BillServiceImpl implements BillService{
         } catch (Exception e) {
             throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
         }
+    }
+
+    // admin features
+    @Override
+    public List<BillResponseDto> sortBillByOrderedTime(String mode) {
+        Sort.Direction modeSort;
+        if (mode.equals("asc")) {
+            modeSort = Sort.Direction.ASC;
+        } else modeSort = Sort.Direction.DESC;
+        List<Bill> bills = StreamSupport
+                .stream(billRepository.findAll(Sort.by(modeSort,"orderedTime")).spliterator(),false)
+                .collect(Collectors.toList());
+        return mapper.billsToResponseDtos(bills);
     }
 }

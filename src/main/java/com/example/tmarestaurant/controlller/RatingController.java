@@ -51,7 +51,7 @@ public class RatingController {
     @GetMapping("/getAll")
     public RestaurantResponse<List<RatingResponseDto>> getRatings() {
         List<RatingResponseDto> ratingResponseDtos = ratingService.getRatings();
-        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.RATING_ENTITY, ratingResponseDtos);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.RATING_ENTITY, ratingResponseDtos.size() ,ratingResponseDtos);
         return response;
     }
     @DeleteMapping("/delete/{id}")

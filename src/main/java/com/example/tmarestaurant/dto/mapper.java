@@ -7,6 +7,7 @@ import com.example.tmarestaurant.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class mapper {
     public static UserResponseDto userToUserResponseDto(User user) {
@@ -16,12 +17,23 @@ public class mapper {
         userResponseDto.setFullname(user.getFullname());
         userResponseDto.setUsername(user.getUsername());
         userResponseDto.setBills(user.getBills());
-        userResponseDto.setComments(user.getComments());
-        userResponseDto.setRatings(user.getRatings());
+
         userResponseDto.setLikes(user.getLikes());
 
         userResponseDto.setRole(user.getRole());
         userResponseDto.setPhone(user.getPhone());
+        List<Comment> comments = new ArrayList<>();
+        for (Comment comment : user.getComments()) {
+            comment.setMenu(null);
+            comments.add(comment);
+        }
+        List<Rating> ratings = new ArrayList<>();
+        for (Rating rating : user.getRatings()) {
+            rating.setMenu(null);
+            ratings.add(rating);
+        }
+        userResponseDto.setComments(comments);
+        userResponseDto.setRatings(ratings);
         return userResponseDto;
     }
     public static List<UserResponseDto> usersToUserResponseDtos(List<User> users) {
@@ -39,10 +51,22 @@ public class mapper {
         menuResponseDto.setDescription(menu.getDescription());
         menuResponseDto.setImages(menu.getImages());
         menuResponseDto.setName(menu.getName());
-        menuResponseDto.setComments(menu.getComments());
-        menuResponseDto.setRatings(menu.getRatings());
+
+        menuResponseDto.setPoint(menu.getPoint());
+        List<Comment> comments = new ArrayList<>();
+        for (Comment comment : menu.getComments()) {
+            comment.setMenu(null);
+            comments.add(comment);
+        }
+        List<Rating> ratings = new ArrayList<>();
+        for (Rating rating : menu.getRatings()) {
+            rating.setMenu(null);
+            ratings.add(rating);
+        }
 
 //        menuResponseDto.setLikes(menu.getLikes());
+        menuResponseDto.setComments(comments);
+        menuResponseDto.setRatings(ratings);
         menuResponseDto.setPrice(menu.getPrice());
         menuResponseDto.setLikedCount(menu.getLikedCount());
 

@@ -57,7 +57,7 @@ public class UserController {
             return response;
         }
 
-        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.USER_ENTITY , userResponseDtos);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.USER_ENTITY , userResponseDtos.size() ,userResponseDtos);
         return response;
     }
     @DeleteMapping("/delete/{id}")

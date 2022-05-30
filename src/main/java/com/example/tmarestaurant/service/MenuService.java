@@ -5,7 +5,10 @@ import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.model.Bill;
+import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Menu;
+import com.example.tmarestaurant.model.Rating;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -17,8 +20,7 @@ public interface MenuService {
     void deleteMenu(Long menuId);
     void editMenu(Long menuId, MenuRequestDto menuRequestDto);
     List<MenuResponseDto> searchMenuByNameAndDescription(String queryString);
-//    public BillResponseDto addAuthorToBill(Long BillId, Long authorId);
-//    public BillResponseDto deleteAuthorFromBill(Long BillId, Long authorId);
-//    public BillResponseDto addCategoryToBill(Long BillId, Long categoryId);
-//    public BillResponseDto removeCategoryFromBill(Long BillId, Long categoryId);
+    List<MenuResponseDto> sortMenuByField(String field, String mode);
+    List<MenuResponseDto> getMenus(int offset, int pageSize);
+    int caculatedPoint(List<Rating> ratings, List<Comment> comments);
 }

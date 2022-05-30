@@ -85,6 +85,11 @@ public class UserServiceImpl implements UserService{
         user.setBills(billService.getBillsByUser(userId));
 //        System.out.println("--------------------------------------------- user service " + user.getRatings());
 
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+        }
         return user;
     }
 

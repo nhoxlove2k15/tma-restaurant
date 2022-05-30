@@ -39,7 +39,7 @@ public class LikeController {
     @GetMapping("/getAll")
     public RestaurantResponse<List<LikeResponseDto>> getLikes() {
         List<LikeResponseDto> likeResponseDtos = likeService.getLikes();
-        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.LIKE_ENTITY, likeResponseDtos);
+        response = new RestaurantResponse(true, MyConstant.ACTION_GET, MyConstant.LIKE_ENTITY, likeResponseDtos.size() ,likeResponseDtos);
         return response;
     }
 
