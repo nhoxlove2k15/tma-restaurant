@@ -2,15 +2,11 @@ package com.example.tmarestaurant.controlller;
 
 import com.example.tmarestaurant.client.Connection;
 import com.example.tmarestaurant.dto.request.CommentRequestDto;
-import com.example.tmarestaurant.dto.request.RatingRequestDto;
 import com.example.tmarestaurant.dto.response.CommentResponseDto;
-import com.example.tmarestaurant.dto.response.RatingResponseDto;
 import com.example.tmarestaurant.service.CommentService;
-import com.example.tmarestaurant.utils.MyConstant;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,10 +33,11 @@ public class CommentController {
             response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(true, MyConstant.ACTION_CREATE , MyConstant.COMMENT_ENTITY, commentResponseDto.getId());
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_CREATE , RestaurantConstant.COMMENT_ENTITY, commentResponseDto.getId());
 
         return response;
     }
+
     @GetMapping("get/{id}")
     public RestaurantResponse<CommentResponseDto> getComment(@PathVariable final Long id) {
         CommentResponseDto commentResponseDto;
@@ -52,17 +49,19 @@ public class CommentController {
             return response;
         }
 
-        response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.COMMENT_ENTITY, commentResponseDto);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.COMMENT_ENTITY, commentResponseDto);
 
 
         return response;
     }
+
     @GetMapping("/getAll")
     public RestaurantResponse<List<CommentResponseDto>> getComments() {
         List<CommentResponseDto> commentResponseDtos = commentService.getComments();
-        RestaurantResponse response = new RestaurantResponse(true, MyConstant.ACTION_GET , MyConstant.COMMENT_ENTITY, commentResponseDtos.size(),commentResponseDtos);
+        RestaurantResponse response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.COMMENT_ENTITY, commentResponseDtos.size(),commentResponseDtos);
         return response;
     }
+
     @DeleteMapping("/delete/{id}")
     public RestaurantResponse<CommentResponseDto> deleteComment(@PathVariable final Long id) {
 
@@ -75,7 +74,7 @@ public class CommentController {
             return response;
         }
 
-        response = new RestaurantResponse(true, MyConstant.ACTION_DELETE , MyConstant.COMMENT_ENTITY, null);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_DELETE , RestaurantConstant.COMMENT_ENTITY, null);
         return response;
     }
 
@@ -85,13 +84,11 @@ public class CommentController {
         RestaurantResponse response ;
         try {
             commentService.editComment(id,commentRequestDto);
-
         } catch (Exception e) {
             response = new RestaurantResponse(false,e.getMessage(), null);
             return response;
         }
-
-        response = new RestaurantResponse(true, MyConstant.ACTION_UPDATE , MyConstant.COMMENT_ENTITY, id);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_UPDATE , RestaurantConstant.COMMENT_ENTITY, id);
         return response;
     }
 }

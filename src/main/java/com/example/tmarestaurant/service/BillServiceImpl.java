@@ -8,16 +8,12 @@ import com.example.tmarestaurant.model.BillDetail;
 import com.example.tmarestaurant.repository.BillDetailRepository;
 import com.example.tmarestaurant.repository.BillRepository;
 import com.example.tmarestaurant.utils.MenuOrigin;
-import com.example.tmarestaurant.utils.MyConstant;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,37 +28,23 @@ public class BillServiceImpl implements BillService{
         this.billDetailRepository = billDetailRepository;
     }
 
-//    @Transactional
     @Override
     public BillResponseDto addBill(BillRequestDto billRequestDto) {
 
 
         BillDetail billDetail = mapper.billDetailRequestToBillDetail(billRequestDto.getBillDetails());
-//        System.out.println("============================================ bill serivce" + billDetail.getMenuOrigin());
-
         Bill bill = new Bill();
-//        bill.setId(2L);
         bill.setId(billRequestDto.getId());
-        bill.setTotalprice(billRequestDto.getTotalPrice());
         bill.getUser().setId(billRequestDto.getUserId());
         bill.getBillDetails().setId(billDetail.getId());
         bill.setTotalprice(caculateTotalPrice(billDetail));
-//        System.out.println("============================================ bill serivce" + bill.getBillDetails().getId() );
-
         try {
             billRepository.save(bill);
-
-
-        } catch (Exception e) {
-            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
-        }
-        try {
             billDetailRepository.save(billDetail);
 
         } catch (Exception e) {
-            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_DETAILS_ENTITY);
+            throw new IllegalArgumentException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.BILL_ENTITY);
         }
-
         return mapper.billToBillResponseDto(bill);
     }
 
@@ -75,7 +57,7 @@ public class BillServiceImpl implements BillService{
     @Override
     public Bill getBill(Long billId) {
         Bill bill = billRepository.findById(billId).orElseThrow(
-                () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.BILL_ENTITY)
+                () -> new IllegalArgumentException(RestaurantConstant.ERR_GET_ENTITY + RestaurantConstant.BILL_ENTITY)
         );
         return bill;
 
@@ -114,38 +96,35 @@ public class BillServiceImpl implements BillService{
         return  sum;
     }
 
-//    @Override
-//    public double getTotalPrice() {
-//        List<Bill> bills = billRepository.findAll().set
-//        return 0;
-//    }
-
     @Override
     public void deleteBill(Long billId) {
         try {
             billRepository.deleteById(billId);
         } catch (Exception e) {
-            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
+            throw new IllegalArgumentException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.BILL_ENTITY);
         }
 
     }
 
     @Override
     public void editBill(Long billId, BillRequestDto billRequestDto) {
-//        Long billDetailId = billRequestDto.getBillDetails().getId();
         BillDetail billDetailToEdit = billDetailRepository.findById(billId - 1 ).orElseThrow(
-                () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.BILL_DETAILS_ENTITY)
+                () -> new IllegalArgumentException(RestaurantConstant.ERR_GET_ENTITY + RestaurantConstant.BILL_DETAILS_ENTITY)
         );
 
         billDetailToEdit.setDiscount(billRequestDto.getBillDetails().getDiscount());
         try {
             billDetailRepository.save( billDetailToEdit);
         } catch (Exception e) {
-            throw new IllegalArgumentException(MyConstant.ERR_WRONG_DATABASE + MyConstant.BILL_ENTITY);
+            throw new IllegalArgumentException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.BILL_ENTITY);
         }
     }
 
-    // admin features
+    /**
+     * This function is admin features
+     * @param mode : asc or desc
+     * @return List after sorted by mode
+     */
     @Override
     public List<BillResponseDto> sortBillByOrderedTime(String mode) {
         Sort.Direction modeSort;

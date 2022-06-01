@@ -1,12 +1,7 @@
 package com.example.tmarestaurant.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-
-
 
 @Entity
 @Table(name = "menu_ratings")
@@ -22,25 +17,16 @@ public class Rating {
             generator = "rating_sequence"
     )
     private Long id;
-
     @Column(name = "point")
     private double point;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-
     private User user;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "menu_id")
     private Menu menu;
-
-//    @Column(name = "user_id")
-//    private Long userId;
-//    @Column(name = "menu_id")
-//    private Long menuId;
-
 
     public Rating() {
         this.user = new User();

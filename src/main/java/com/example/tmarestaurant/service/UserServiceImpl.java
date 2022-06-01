@@ -3,18 +3,16 @@ package com.example.tmarestaurant.service;
 import com.example.tmarestaurant.dto.mapper;
 import com.example.tmarestaurant.dto.request.UserRegisterDto;
 import com.example.tmarestaurant.dto.response.UserResponseDto;
-import com.example.tmarestaurant.model.Comment;
-import com.example.tmarestaurant.model.Rating;
 import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.UserRepository;
-import com.example.tmarestaurant.utils.MyConstant;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
 @Service
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
@@ -39,20 +37,20 @@ public class UserServiceImpl implements UserService{
         List<User> users = userRepository.findAll().stream()
                 .filter(c1 -> c1.getUsername().equals(username))
                 .collect(Collectors.toList());
-//        System.out.println("=================================== comment service" + comments);
+
         if (users.size() != 0) {
-            throw new IllegalStateException(MyConstant.USER_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+            throw new IllegalStateException(RestaurantConstant.USER_ENTITY + RestaurantConstant.ERR_ENTITY_EXISTED);
         }
         User user = new User();
         user.setFullname(userRegisterDto.getFullname());
         user.setUsername(userRegisterDto.getUsername());
         user.setPassword(userRegisterDto.getPassword());
         user.setPhone(userRegisterDto.getPhone());
-        // encode password and check username is exist
+
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.USER_ENTITY);
         }
 
         return mapper.userToUserResponseDto(user);
@@ -76,19 +74,18 @@ public class UserServiceImpl implements UserService{
     public User getUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(
-                        () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.USER_ENTITY)
+                        () -> new IllegalArgumentException(RestaurantConstant.ERR_GET_ENTITY + RestaurantConstant.USER_ENTITY)
                 );
-//        user.setM
+
         user.setRatings(ratingService.getRatingsByUser(user.getId()));
         user.setLikes(likeService.getLikes(user.getId()));
         user.setComments(commentService.getCommentsByUser(user.getId()));
         user.setBills(billService.getBillsByUser(userId));
-//        System.out.println("--------------------------------------------- user service " + user.getRatings());
 
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.USER_ENTITY);
         }
         return user;
     }
@@ -98,7 +95,7 @@ public class UserServiceImpl implements UserService{
         try {
             userRepository.deleteById(userId);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.USER_ENTITY);
         }
     }
 
@@ -110,7 +107,7 @@ public class UserServiceImpl implements UserService{
         try {
             userRepository.save(userToEdit);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.USER_ENTITY);
         }
 
     }

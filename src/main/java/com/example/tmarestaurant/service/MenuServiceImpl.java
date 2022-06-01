@@ -6,34 +6,24 @@ import com.example.tmarestaurant.dto.response.MenuResponseDto;
 import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.Rating;
-import com.example.tmarestaurant.model.User;
 import com.example.tmarestaurant.repository.MenuRepository;
-import com.example.tmarestaurant.utils.MyConstant;
-import lombok.var;
-import org.json.JSONObject;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
 @Service
 public class MenuServiceImpl implements MenuService{
-//    @Autowired @Lazy
+
     private  final MenuRepository menuRepository;
-//    @Autowired @Lazy
     private  final LikeService likeService;
     private final RatingService ratingService;
     private final CommentService commentService;
-
 
     @Autowired
     public MenuServiceImpl( MenuRepository menuRepository,@Lazy LikeService likeService, @Lazy RatingService ratingService , @Lazy CommentService commentService) {
@@ -43,45 +33,26 @@ public class MenuServiceImpl implements MenuService{
         this.commentService = commentService;
     }
 
-//    public LikeService getLikeService() {
-//        return likeService;
-//    }
-//    @PostConstruct
-//    public void init() {
-//
-//        likeService.setMenuService(this);
-//    }
-//    public void setLikeService(LikeServiceImpl likeService) {
-//        this.likeService = likeService;
-//    }
-
-//    @Autowired
-//    public MenuServiceImpl(MenuRepository menuRepository) {
-//        this.menuRepository = menuRepository;
-//    }
-
     @Override
     public MenuResponseDto addMenu(MenuRequestDto menuRequestDto) {
         String name = menuRequestDto.getName();
         List<Menu> menus = menuRepository.findAll().stream()
                 .filter(c1 -> c1.getName().equals(name) )
                 .collect(Collectors.toList());
-//        System.out.println("=================================== comment service" + comments);
+
         if (menus.size() != 0) {
-            throw new IllegalStateException(MyConstant.MENU_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+            throw new IllegalStateException(RestaurantConstant.MENU_ENTITY + RestaurantConstant.ERR_ENTITY_EXISTED);
         }
         Menu menu = new Menu();
         menu.setDescription(menuRequestDto.getDescription());
         menu.setPrice(menuRequestDto.getPrice());
         menu.setName(menuRequestDto.getName());
-//        menu.setRatings(ratingService.getRatingsByMenu(menu.getId()));
-        // need category repository
-//        menu.setCategory(menuRequs);
         menu.getCategory().setId((long) menuRequestDto.getCategoryId());
+
         try {
             menuRepository.save(menu);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.MENU_ENTITY);
         }
         return mapper.menuToMenuResponseDto(menu);
     }
@@ -96,7 +67,7 @@ public class MenuServiceImpl implements MenuService{
     public Menu getMenu(Long menuId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(
-                        () -> new IllegalArgumentException(MyConstant.ERR_GET_ENTITY + MyConstant.MENU_ENTITY)
+                        () -> new IllegalArgumentException(RestaurantConstant.ERR_GET_ENTITY + RestaurantConstant.MENU_ENTITY)
                 );
         menu.setLikedCount(likeService.getLikedCount(menu.getId()));
         List<Rating> ratings = ratingService.getRatingsByMenu(menu.getId());
@@ -110,14 +81,13 @@ public class MenuServiceImpl implements MenuService{
         try {
             menuRepository.save(menu);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.USER_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.USER_ENTITY);
         }
         return menu;
     }
 
     @Override
     public int caculatedPoint(List<Rating> ratings, List<Comment> comments) {
-
 
         int sum = 0 ;
         for (Rating rating : ratings) {
@@ -129,6 +99,7 @@ public class MenuServiceImpl implements MenuService{
         sum = sum / (comments.size() + ratings.size());
         return sum;
     }
+
     @Override
     public List<MenuResponseDto> getMenus() {
         List<Menu> menus = StreamSupport
@@ -145,7 +116,7 @@ public class MenuServiceImpl implements MenuService{
             menuRepository.deleteById(menuId);
 
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.MENU_ENTITY);
         }
 
     }
@@ -160,22 +131,19 @@ public class MenuServiceImpl implements MenuService{
 
 
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.MENU_ENTITY);
         }
 
     }
 
     @Override
     public List<MenuResponseDto> searchMenuByNameAndDescription(String queryString) {
-//        Map<Long,Long> map = new HashMap();
 
-//        if (menu != null) {
         List<Menu> results;
         try {
              results = menuRepository.getMenuByName(queryString);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.MENU_ENTITY);
-
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.MENU_ENTITY);
         }
 
         return mapper.menusToMenuResponseDtos(results);
@@ -197,13 +165,10 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public List<MenuResponseDto> getMenus(int offset, int pageSize) {
+
         List<Menu> menus = StreamSupport
                 .stream(menuRepository.findAll(PageRequest.of(offset,pageSize)).spliterator(), false)
                 .collect(Collectors.toList());
         return mapper.menusToMenuResponseDtos(menus);
     }
-
-
-
-
 }

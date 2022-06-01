@@ -24,20 +24,14 @@ public class Like {
             generator = "like_sequence"
     )
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JoinColumn(name = "user_id")
     User user ;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "menu_id")
     Menu menu ;
-//    @Column(name = "user_id")
-//    private Long userId;
-//    @Column(name = "menu_id")
-//    private Long menuId;
 
     public Long getId() {
         return id;

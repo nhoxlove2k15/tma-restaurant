@@ -2,13 +2,10 @@ package com.example.tmarestaurant.controlller;
 
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
-import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.service.MenuService;
-import com.example.tmarestaurant.utils.MyConstant;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import com.example.tmarestaurant.utils.RestaurantResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,11 +18,11 @@ public class MenuController {
     private MenuResponseDto menuResponseDto;
     private RestaurantResponse response;
 
-
     @Autowired
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
     }
+
     @PostMapping("/addMenu")
     public RestaurantResponse<MenuResponseDto> addMenu(@RequestBody final MenuRequestDto menuRequestDto) {
         try {
@@ -36,9 +33,10 @@ public class MenuController {
             return response;
         }
 
-        response = new RestaurantResponse(true,MyConstant.ACTION_CREATE , MyConstant.MENU_ENTITY, menuResponseDto.getId());
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_CREATE , RestaurantConstant.MENU_ENTITY, menuResponseDto.getId());
         return response;
     }
+
     @GetMapping("get/{id}")
     public RestaurantResponse<MenuResponseDto> getMenu(@PathVariable final Long id) {
         try {
@@ -48,7 +46,7 @@ public class MenuController {
             return response;
         }
 
-        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY, menuResponseDto);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.MENU_ENTITY, menuResponseDto);
         return response;
     }
 
@@ -62,9 +60,10 @@ public class MenuController {
             return response;
         }
 
-        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY,menuResponseDtos.size() ,menuResponseDtos);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.MENU_ENTITY,menuResponseDtos.size() ,menuResponseDtos);
         return response;
     }
+
     @GetMapping("/search/{queryString}")
     public RestaurantResponse<List<MenuResponseDto>> searchMenuByName(@PathVariable final String queryString){
         List<MenuResponseDto> menuResponseDtos ;
@@ -75,9 +74,10 @@ public class MenuController {
             response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY, menuResponseDtos.size() ,menuResponseDtos);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.MENU_ENTITY, menuResponseDtos.size() ,menuResponseDtos);
         return response;
     }
+
     @GetMapping("/sort/{field}/{mode}")
     public RestaurantResponse<List<MenuResponseDto>> searchMenuByName(@PathVariable final String field,
                                                                       @PathVariable final String mode){
@@ -89,24 +89,24 @@ public class MenuController {
             response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY,menuResponseDtos.size() ,menuResponseDtos);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.MENU_ENTITY,menuResponseDtos.size() ,menuResponseDtos);
         return response;
     }
+
     @GetMapping("/getAll/{offset}/{pageSize}")
     public RestaurantResponse<List<MenuResponseDto>> getMenusWithPaging(@PathVariable final int offset,
                                                                         @PathVariable final int pageSize){
         List<MenuResponseDto> menuResponseDtos ;
         try {
             menuResponseDtos = menuService.getMenus(offset,pageSize);
-
         } catch (Exception e) {
             response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
-//        System.out.println("========================= menu controller:" + menuResponseDtos.size());
-        response = new RestaurantResponse(true,MyConstant.ACTION_GET , MyConstant.MENU_ENTITY, menuResponseDtos.size() ,menuResponseDtos);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_GET , RestaurantConstant.MENU_ENTITY, menuResponseDtos.size() ,menuResponseDtos);
         return response;
     }
+
     @DeleteMapping("/delete/{id}")
     public RestaurantResponse<MenuResponseDto> deleteMenu(@PathVariable final Long id) {
         try {
@@ -115,10 +115,10 @@ public class MenuController {
             response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
-
-        response = new RestaurantResponse(true,MyConstant.ACTION_DELETE , MyConstant.MENU_ENTITY, null);
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_DELETE , RestaurantConstant.MENU_ENTITY, null);
         return response;
     }
+
     @PatchMapping("/edit/{id}")
     public RestaurantResponse<MenuResponseDto> editMenu(@PathVariable final Long id,
                                                         @RequestBody final MenuRequestDto MenuRequestDto) {
@@ -128,8 +128,7 @@ public class MenuController {
             response = new RestaurantResponse(false, e.getMessage(), null);
             return response;
         }
-        response = new RestaurantResponse(true,MyConstant.ACTION_UPDATE , MyConstant.MENU_ENTITY, id);
-
+        response = new RestaurantResponse(true, RestaurantConstant.ACTION_UPDATE , RestaurantConstant.MENU_ENTITY, id);
         return response;
     }
 

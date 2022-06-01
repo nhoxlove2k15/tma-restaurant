@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class CommentResponseDto {
-
     @JsonAlias(value = "id")
     private Long id;
     @JsonAlias(value = "content")
@@ -20,5 +19,4 @@ public class CommentResponseDto {
     private User user;
     @JsonAlias(value = "menu")
     private Menu menu;
-
 }

@@ -1,13 +1,10 @@
 package com.example.tmarestaurant.dto;
 
 import com.example.tmarestaurant.dto.request.BillDetailRequestDto;
-import com.example.tmarestaurant.dto.request.RatingRequestDto;
 import com.example.tmarestaurant.dto.response.*;
 import com.example.tmarestaurant.model.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class mapper {
     public static UserResponseDto userToUserResponseDto(User user) {
@@ -17,23 +14,32 @@ public class mapper {
         userResponseDto.setFullname(user.getFullname());
         userResponseDto.setUsername(user.getUsername());
         userResponseDto.setBills(user.getBills());
-
         userResponseDto.setLikes(user.getLikes());
-
         userResponseDto.setRole(user.getRole());
         userResponseDto.setPhone(user.getPhone());
+
         List<Comment> comments = new ArrayList<>();
         for (Comment comment : user.getComments()) {
-            comment.setMenu(null);
+            comment.setUser(null);
             comments.add(comment);
         }
+
         List<Rating> ratings = new ArrayList<>();
         for (Rating rating : user.getRatings()) {
-            rating.setMenu(null);
+            rating.setUser(null);
             ratings.add(rating);
         }
+
+        List<Like> likes = new ArrayList<>();
+        for (Like like : user.getLikes()) {
+            like.setUser(null);
+            likes.add(like);
+        }
+
         userResponseDto.setComments(comments);
         userResponseDto.setRatings(ratings);
+        userResponseDto.setLikes(likes);
+
         return userResponseDto;
     }
     public static List<UserResponseDto> usersToUserResponseDtos(List<User> users) {
@@ -51,20 +57,20 @@ public class mapper {
         menuResponseDto.setDescription(menu.getDescription());
         menuResponseDto.setImages(menu.getImages());
         menuResponseDto.setName(menu.getName());
-
         menuResponseDto.setPoint(menu.getPoint());
+
         List<Comment> comments = new ArrayList<>();
         for (Comment comment : menu.getComments()) {
             comment.setMenu(null);
             comments.add(comment);
         }
+
         List<Rating> ratings = new ArrayList<>();
         for (Rating rating : menu.getRatings()) {
             rating.setMenu(null);
             ratings.add(rating);
         }
 
-//        menuResponseDto.setLikes(menu.getLikes());
         menuResponseDto.setComments(comments);
         menuResponseDto.setRatings(ratings);
         menuResponseDto.setPrice(menu.getPrice());
@@ -86,7 +92,6 @@ public class mapper {
         billResponseDto.setId(bill.getId());
         billResponseDto.setTotalprice(bill.getTotalprice());
         billResponseDto.setBillDetails(bill.getBillDetails());
-//        billResponseDto.setUser(bill.getUser());
 
         return  billResponseDto;
     }
@@ -100,39 +105,35 @@ public class mapper {
     }
     public static BillDetail billDetailRequestToBillDetail(BillDetailRequestDto billDetailRequestDto) {
         BillDetail billDetail = new BillDetail();
+
         billDetail.setDiscount(billDetailRequestDto.getDiscount());
         billDetail.setId(billDetailRequestDto.getId());
         billDetail.setMenuOrigin(billDetailRequestDto.getMenuOrigin());
+
         return billDetail;
     }
 
     public static LikeResponseDto likeToLikeResponseDto(Like like) {
         LikeResponseDto likeResponseDto = new LikeResponseDto();
-//        MenuResponseDto re = menuToMenuResponseDto(like.getMenu());
-        System.out.println("===============================================" + like.getMenu() );
         likeResponseDto.setId(like.getId());
         likeResponseDto.setMenu(like.getMenu());
-        System.out.println("===============================================" + likeResponseDto.getMenu() );
-
-//        System.out.println("===============================================" + re );
-
         return likeResponseDto;
     }
     public static List<LikeResponseDto> likeResponseDtos (List<Like> likes) {
         List<LikeResponseDto> likeResponseDtos = new ArrayList<>();
-
         for (Like like : likes) {
             likeResponseDtos.add(likeToLikeResponseDto(like));
         }
-        System.out.println("===============================================" + "likes menus ");
         return likeResponseDtos;
     }
 
     public static RatingResponseDto ratingToRatingResponseDto(Rating rating) {
         RatingResponseDto ratingResponseDto = new RatingResponseDto();
+
         ratingResponseDto.setUser(rating.getUser());
         ratingResponseDto.setMenu(rating.getMenu());
         ratingResponseDto.setId(rating.getId());
+
         return ratingResponseDto;
     }
 
@@ -146,12 +147,14 @@ public class mapper {
 
     public static CommentResponseDto commentToCommentResponseDto(Comment comment) {
         CommentResponseDto commentResponseDto = new CommentResponseDto();
+
         commentResponseDto.setContent(comment.getContent());
         commentResponseDto.setToxic(comment.isToxic());
         commentResponseDto.setPoint(comment.getPoint());
         commentResponseDto.setMenu(comment.getMenu());
         commentResponseDto.setUser(comment.getUser());
         commentResponseDto.setId(comment.getId());
+
         return commentResponseDto;
     }
 

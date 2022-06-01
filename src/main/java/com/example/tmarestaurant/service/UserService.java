@@ -13,6 +13,5 @@ public interface UserService {
     User getUser(Long UserId);
     void deleteUser(Long userId);
     void editUser(Long userId, UserRegisterDto userRegisterDto);
-//    public UserResponseDto addZipcodeToUsers(Long UsersId, Long zipcodeId);
-//    public UserResponseDto deleteZipcodeFromUsers(Long UsersId);
+
 }

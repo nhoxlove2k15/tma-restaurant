@@ -14,21 +14,15 @@ import java.util.Set;
 
 @Data
 public class MenuResponseDto {
-
     private Long id;
     private String name;
     private String description;
-
     private double price;
-
     private String images;
     private double point;
     private int likedCount;
     private List<Like> likes = new ArrayList<>();
-
     private List<Rating> ratings = new ArrayList<>();
-
     private List<Comment> comments = new ArrayList<>();
-
     private Category category;
 }

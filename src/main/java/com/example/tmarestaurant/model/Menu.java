@@ -40,11 +40,6 @@ public class Menu {
     private double price;
     @Column(name = "images")
     private String images;
-    // ["url1","url2","url3"]
-//    @Convert(converter = MenuOriginConverter.class)
-//    @Column(name = "imagesjson")
-//    private Set<MenuOrigin> imagesjson;
-
     @Column(name = "point")
     private double point;
     @Column(name = "liked_count")
@@ -59,20 +54,16 @@ public class Menu {
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
     @ManyToOne(fetch = FetchType.EAGER)
-//    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "category_id")
-
-
-
-
-//    @Column(name = "category_id")
-//    private Long categoryId;
-
     private Category category = new Category();
 
-
-
-
+    public Menu(String name, String description, double price, String images, Long categoryId) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.images = images;
+        this.getCategory().setId(categoryId);
+    }
 
     public Long getId() {
         return id;
@@ -114,14 +105,6 @@ public class Menu {
         this.images = images;
     }
 
-//    public Set<MenuOrigin> getImagesjson() {
-//        return imagesjson;
-//    }
-//
-//    public void setImagesjson(Set<MenuOrigin> imagesjson) {
-//        this.imagesjson = imagesjson;
-//    }
-
     public double getPoint() {
         return point;
     }
@@ -138,7 +121,6 @@ public class Menu {
         this.likedCount = likedCount;
     }
 
-
     public Category getCategory() {
         return category;
     }
@@ -146,18 +128,6 @@ public class Menu {
     public void setCategory(Category category) {
         this.category = category;
     }
-
-
-
-
-
-//    public Menu(String name, String description, double price, String images) {
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//        this.images = images;
-//    }
-
 
     public List<Like> getLikes() {
         return likes;
@@ -183,32 +153,4 @@ public class Menu {
         this.comments = comments;
     }
 
-    public Menu(String name, String description, double price, String images, Long categoryId) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.images = images;
-//        this.setCategory() = new Category();
-        this.getCategory().setId(categoryId);
-    }
-
-//    public Menu(String name, String description, double price, String images, List<String> imagesjson, Long categoryId) {
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//        this.images = images;
-//        this.imagesjson = imagesjson;
-//        this.categoryId = categoryId;
-//    }
-
-//    public Menu(String name, String description, double price, String images, Set<MenuOrigin> imagesjson, Long categoryId) {
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//        this.images = images;
-//        this.imagesjson = imagesjson;
-//        this.getCategory().setId(categoryId);
-//
-////        this.categoryId = categoryId;
-//    }
 }

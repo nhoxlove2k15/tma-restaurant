@@ -6,34 +6,26 @@ import com.example.tmarestaurant.dto.request.CommentRequestDto;
 import com.example.tmarestaurant.dto.response.CommentResponseDto;
 import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.repository.CommentRepository;
-import com.example.tmarestaurant.client.APIRetrofit;
 import com.example.tmarestaurant.client.CommentResponseFromML;
-import com.example.tmarestaurant.utils.MyConstant;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
 @Service
 public class CommentServiceImpl implements CommentService {
     private  final CommentRepository commentRepository ;
-    private  final UserService userService;
-    private  final MenuService menuService;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, MenuService menuService) {
+    public CommentServiceImpl(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.userService = userService;
-        this.menuService = menuService;
     }
 
     @Override
@@ -43,17 +35,13 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findAll().stream()
                 .filter(c1 -> c1.getUser().getId() == userId && c1.getMenu().getId() == menuId)
                 .collect(Collectors.toList());
-//        System.out.println("=================================== comment service" + comments);
         if (comments.size() != 0) {
-            throw new IllegalStateException(MyConstant.COMMENT_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+            throw new IllegalStateException(RestaurantConstant.COMMENT_ENTITY + RestaurantConstant.ERR_ENTITY_EXISTED);
         }
         Comment comment = new Comment();
         comment.getMenu().setId(menuId);
         comment.getUser().setId(userId);
         comment.setContent(commentRequestDto.getContent());
-
-
-
         String jsonString = "" ;
         try {
             jsonString = String.valueOf(new JSONObject()
@@ -86,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             commentRepository.save(comment);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.COMMENT_ENTITY);
         }
         return mapper.commentToCommentResponseDto(comment);
     }
@@ -99,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment getComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () ->  new IllegalStateException(MyConstant.ERR_GET_ENTITY + MyConstant.COMMENT_ENTITY)
+                () ->  new IllegalStateException(RestaurantConstant.ERR_GET_ENTITY + RestaurantConstant.COMMENT_ENTITY)
         );
 
         return comment;
@@ -111,14 +99,9 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = StreamSupport
                 .stream(commentRepository.findAll().spliterator(),false)
                 .collect(Collectors.toList());
-//        List<Comment> copyComments = new ArrayList<>();
-//        for (Comment comment : comments) {
-//            copyComments.add(comment);
-//        }
         List<Comment> results = new ArrayList<>();
         for(Comment comment : comments) {
             if(comment.getUser().getId() == userId) {
-//                comment.setUser(null);
                 results.add(comment);
             }
         }
@@ -134,7 +117,6 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> results = new ArrayList<>();
         for(Comment comment : comments) {
             if(comment.getMenu().getId() == menuId) {
-//                comment.setMenu(null);
                 results.add(comment);
             }
         }
@@ -150,20 +132,12 @@ public class CommentServiceImpl implements CommentService {
         return mapper.commentToCommentResponseDtos(comments);
     }
 
-//    @Override
-//    public List<CommentResponseDto> getComments() {
-//        List<Comment> commentResponseDtos = StreamSupport
-//                .stream(commentRepository.findAll().spliterator(),false)
-//                .collect(Collectors.toList());
-//        return mapper.commentToCommentResponseDtos(commentResponseDtos);
-//    }
-
     @Override
     public void deleteComment(Long commentId) {
         try {
             commentRepository.deleteById(commentId);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.COMMENT_ENTITY);
         }
     }
 
@@ -175,7 +149,7 @@ public class CommentServiceImpl implements CommentService {
             commentRepository.save(commentToEdit);
 
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.COMMENT_ENTITY);
         }
     }
 }

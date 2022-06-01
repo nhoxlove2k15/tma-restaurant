@@ -10,12 +10,6 @@ import java.util.Properties;
 public class TmaRestaurantApplication {
 
 	public static void main(String[] args) {
-//		Properties jpaProperties = new Properties();
-//
-//
-//		jpaProperties.put("hibernate.default_schema", "my_default_schema");
-//		ManagementFactory entityManagerFactoryBean = new ManagementFactory();
-//		entityManagerFactoryBean.setJpaProperties(jpaProperties);
 		SpringApplication.run(TmaRestaurantApplication.class, args);
 	}
 

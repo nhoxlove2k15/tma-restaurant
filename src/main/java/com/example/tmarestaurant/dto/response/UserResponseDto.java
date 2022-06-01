@@ -14,15 +14,12 @@ public class UserResponseDto {
         private Long id;
         private String fullname;
         private String username;
-
         private String phone;
-
         private UserRole role;
-
         private List<Bill> bills = new ArrayList<>();
         private List<Like> likes = new ArrayList<>();
         private List<Rating> ratings = new ArrayList<>();
         private List<Comment> comments = new ArrayList<>();
-    }
+}
 
 

@@ -36,12 +36,6 @@ public class Comment {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-//    @Column(name = "user_id")
-//    private Long userId;
-//    @Column(name = "menu_id")
-//    private Long menuId;
-
-
     public Comment() {
         this.user = new User();
         this.menu = new Menu();

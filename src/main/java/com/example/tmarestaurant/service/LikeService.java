@@ -16,13 +16,9 @@ import java.util.Set;
 
 public interface LikeService {
     LikeResponseDto addLike(LikeRequestDto likeRequestDto);
-//    LikeResponseDto getLikeById(Long billId);
-//    LikeResponseDto getLike(Long billId);
     List<Like> getLikes(Long userId);
     List<LikeResponseDto> getLikes();
     void deleteLike(LikeRequestDto likeRequestDto);
     int getLikedCount(Long menuId);
     Set<Menu> getMenuLikedByUser(Long userId);
-
-//    LikeResponseDto editLike(Long billId, LikeRequestDto billRequestDto);
 }

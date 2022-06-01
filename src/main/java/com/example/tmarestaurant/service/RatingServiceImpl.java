@@ -4,27 +4,22 @@ import com.example.tmarestaurant.dto.mapper;
 import com.example.tmarestaurant.dto.request.RatingRequestDto;
 import com.example.tmarestaurant.dto.response.RatingResponseDto;
 import com.example.tmarestaurant.model.*;
-import com.example.tmarestaurant.repository.LikeRepository;
 import com.example.tmarestaurant.repository.RatingRepository;
-import com.example.tmarestaurant.utils.MyConstant;
+import com.example.tmarestaurant.utils.RestaurantConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
 @Service
 public class RatingServiceImpl implements RatingService {
     private  final RatingRepository ratingRepository ;
-    private  final UserService userService;
-    private  final MenuService menuService;
 
     @Autowired
-    public RatingServiceImpl(RatingRepository ratingRepository, UserService userService, MenuService menuService) {
+    public RatingServiceImpl(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
-        this.userService = userService;
-        this.menuService = menuService;
     }
 
     @Override
@@ -35,22 +30,18 @@ public class RatingServiceImpl implements RatingService {
         List<Rating> ratingss = ratingRepository.findAll().stream()
                 .filter(c1 -> c1.getUser().getId() == userId && c1.getMenu().getId() == menuId)
                 .collect(Collectors.toList());
-//        System.out.println("=================================== comment service" + comments);
         if (ratingss.size() != 0) {
-            throw new IllegalStateException(MyConstant.RATING_ENTITY + MyConstant.ERR_ENTITY_EXISTED);
+            throw new IllegalStateException(RestaurantConstant.RATING_ENTITY + RestaurantConstant.ERR_ENTITY_EXISTED);
         }
         Rating rating = new Rating();
-
-
         rating.getMenu().setId(menuId);
         rating.getUser().setId(userId);
         rating.setPoint(ratingRequestDto.getPoint());
         try {
             ratingRepository.save(rating);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.RATING_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.RATING_ENTITY);
         }
-
         return mapper.ratingToRatingResponseDto(rating);
     }
 
@@ -62,7 +53,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating getRating(Long ratingId) {
         Rating rating = ratingRepository.findById(ratingId).orElseThrow(
-                () -> new IllegalStateException(MyConstant.ERR_GET_ENTITY + MyConstant.RATING_ENTITY)
+                () -> new IllegalStateException(RestaurantConstant.ERR_GET_ENTITY + RestaurantConstant.RATING_ENTITY)
         );
         return rating;
     }
@@ -75,13 +66,9 @@ public class RatingServiceImpl implements RatingService {
         List<Rating> results = new ArrayList<>();
         for (Rating rating : ratings) {
             if (rating.getUser().getId() == userId) {
-//                rating.setUser(null);
                 results.add(rating);
             }
         }
-//        System.out.println("----------------------------------------------- rating service size " + results.size());
-//        System.out.println("----------------------------------------------- rating service size " + results.get(0).getMenu());
-
         return results;
     }
 
@@ -94,13 +81,9 @@ public class RatingServiceImpl implements RatingService {
         List<Rating> results = new ArrayList<>();
         for (Rating rating : ratings) {
             if (rating.getMenu().getId() == menuId) {
-//                rating.setMenu(null);
                 results.add(rating);
             }
         }
-//        for(Rating rating : ratings_copy) {
-//            rating.setMenu(null);
-//        }
         return results;
     }
 
@@ -114,32 +97,13 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public void deleteRating(Long ratingId) {
-//        Rating rating = new Rating();
         try {
             ratingRepository.deleteById(ratingId);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.RATING_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.RATING_ENTITY);
 
         }
-//        return mapper.ratingToRatingResponseDto(rating);
     }
-
-
-//    @Override
-//    public RatingResponseDto deleteRating(RatingRequestDto ratingRequestDto) {
-//        Long userId = ratingRequestDto.getUserId();
-//        Long menuId = ratingRequestDto.getMenuId();
-//        User user = userService.getUser(userId);
-//        Menu menu = menuService.getMenu(menuId);
-//        Rating rating = new Rating();
-//        if (user != null && menu != null) {
-//            ratingRepository.deleteById(ratingRequestDto.getId());
-//
-//        }
-//        return mapper.ratingToRatingResponseDto(rating);
-//    }
-
-
 
     @Override
     public void editRating(Long ratingId, RatingRequestDto ratingRequestDto) {
@@ -148,10 +112,8 @@ public class RatingServiceImpl implements RatingService {
         try {
             ratingRepository.save(ratingToEdit);
         } catch (Exception e) {
-            throw new IllegalStateException(MyConstant.ERR_WRONG_DATABASE + MyConstant.COMMENT_ENTITY);
+            throw new IllegalStateException(RestaurantConstant.ERR_WRONG_DATABASE + RestaurantConstant.COMMENT_ENTITY);
 
         }
-//        return mapper.ratingToRatingResponseDto(ratingToEdit);
-
     }
 }

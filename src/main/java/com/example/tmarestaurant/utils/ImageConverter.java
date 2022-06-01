@@ -9,11 +9,11 @@ import java.util.List;
 
 public class ImageConverter implements AttributeConverter<List<String>,String> {
 
-
     private  static ObjectMapper mapper;
     static {
         mapper = new ObjectMapper();
     }
+
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
 
@@ -33,6 +33,5 @@ public class ImageConverter implements AttributeConverter<List<String>,String> {
             e.printStackTrace();
         }
         return null;
-
     }
 }

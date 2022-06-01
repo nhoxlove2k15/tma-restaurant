@@ -22,34 +22,25 @@ public class Bill {
             generator = "bill_sequence"
     )
     private Long id ;
-
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "category_id", insertable = false, updatable = false)
-//    private Category category;
-//    @Column(name = "category_id")
-//    private Long categoryId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id" )
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private User user ;
-//    @Column(name = "user_id")
-//    private Long userId ;
-
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "bill_details_id")
     private BillDetail billDetails = new BillDetail();
-//    @Column(name = "bill_details_id")
-//    private Long billDetailsId;
-
     @Column(name = "totalprice")
     private double totalprice;
-
     @Column(name = "ordered_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime orderedTime = LocalDateTime.now();
 
     public Bill() {
         this.user = new User();
+    }
+
+    public Bill(User user, BillDetail billDetails) {
+        this.user = user;
+        this.billDetails = billDetails;
     }
 
     public Bill(User user, BillDetail billDetails, double totalprice) {

@@ -6,14 +6,12 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 import java.util.List;
 
-//@Data
 @Generated("jsonschema2pojo")
 public class CommentResponseFromML {
 
     @SerializedName("predictions")
     @Expose
     private List<Prediction> predictions = null;
-
     public List<Prediction> getPredictions() {
         return predictions;
     }

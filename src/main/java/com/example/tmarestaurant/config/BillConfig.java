@@ -57,7 +57,6 @@ public class BillConfig {
             MenuOrigin menuOrigin3 = new MenuOrigin(pepsi.getName(),pepsi.getDescription(),pepsi.getPrice(),1);
             MenuOrigin menuOrigin4 = new MenuOrigin(chicken.getName(),chicken.getDescription(),chicken.getPrice(),5);
 
-
             BillDetail billDetail1 = new BillDetail();
             billDetail1.getMenuOrigin().addAll(Arrays.asList(menuOrigin1,menuOrigin2));
             BillDetail billDetail2 = new BillDetail();

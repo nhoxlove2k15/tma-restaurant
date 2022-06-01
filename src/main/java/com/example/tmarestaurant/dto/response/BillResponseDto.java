@@ -10,11 +10,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 public class BillResponseDto {
-
     private Long id ;
-
     private BillDetail billDetails;
-
     private double totalprice;
-
 }

@@ -1,15 +1,10 @@
 package com.example.tmarestaurant.service;
 
-import com.example.tmarestaurant.dto.request.BillRequestDto;
 import com.example.tmarestaurant.dto.request.MenuRequestDto;
-import com.example.tmarestaurant.dto.response.BillResponseDto;
 import com.example.tmarestaurant.dto.response.MenuResponseDto;
-import com.example.tmarestaurant.model.Bill;
 import com.example.tmarestaurant.model.Comment;
 import com.example.tmarestaurant.model.Menu;
 import com.example.tmarestaurant.model.Rating;
-import org.springframework.data.domain.PageRequest;
-
 import java.util.List;
 
 public interface MenuService {

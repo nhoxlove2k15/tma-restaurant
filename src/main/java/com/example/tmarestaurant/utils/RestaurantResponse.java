@@ -15,9 +15,8 @@ public class RestaurantResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int recordCount;
     private T data;
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
-//    private String rootError;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String rootError;
 
     public RestaurantResponse(Boolean status, String action, String entity, T data) {
         this.status = status;
@@ -44,10 +43,5 @@ public class RestaurantResponse<T> {
         this.data = data;
         this.recordCount = recordCount;
     }
-    //    public RestaurantResponse(T data, String message, HttpStatus status, String rootError) {
-//        this.data = data;
-//        this.message = message;
-//        this.status = status;
-//        this.rootError = rootError;
-//    }
+
 }

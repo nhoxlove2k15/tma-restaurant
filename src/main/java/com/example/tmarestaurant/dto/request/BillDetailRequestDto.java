@@ -16,7 +16,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class BillDetailRequestDto {
     private Long id;
-    //    private Bill bill;
     @JsonAlias(value = "discount")
     private double discount ;
     @JsonAlias(value = "menu_origin")

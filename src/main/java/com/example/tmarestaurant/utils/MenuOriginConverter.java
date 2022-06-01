@@ -14,7 +14,6 @@ public class MenuOriginConverter implements AttributeConverter<Set<MenuOrigin>,S
         mapper = new ObjectMapper();
     }
 
-
     @Override
     public String convertToDatabaseColumn(Set<MenuOrigin> attribute) {
         try {

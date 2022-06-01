@@ -24,8 +24,6 @@ public class Category {
     private Long id;
     @Column(name = "name")
     private String name;
-//    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Menu> menus;
 
     public Category(String name) {
         this.name = name;

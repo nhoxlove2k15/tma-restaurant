@@ -28,7 +28,6 @@ public class BillDetail {
             generator = "bill_detail_sequence"
     )
     private Long id;
-//    private Bill bill;
     @Column(name = "discount")
     private double discount = 0 ;
     @Convert(converter = MenuOriginConverter.class)
@@ -58,7 +57,6 @@ public class BillDetail {
     public void setDiscount(double discount) {
         this.discount = discount;
     }
-
 
     public Set<MenuOrigin> getMenuOrigin() {
         return menuOrigin;
